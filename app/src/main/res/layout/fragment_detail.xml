@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_movie_jpeg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image_1" />
+            <TextView
+                android:id="@+id/tv_movie_title"
+                android:layout_toRightOf="@+id/iv_movie_jpeg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24dp"
+                android:text="Star Wars"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_movie_title"
+                android:layout_toRightOf="@+id/iv_movie_jpeg"
+
+                >
+            <ImageView
+                android:id="@+id/im_movie_date_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/date_icon"
+                />
+            <TextView
+                android:id="@+id/tv_movie_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="2018"
+                />
+            </RelativeLayout>
+            <ImageView
+                android:id="@+id/im_movie_minute_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/movie_minute"
+
+                android:layout_toRightOf="@+id/iv_movie_jpeg"/>
+            <TextView
+                android:id="@+id/tv_movie_genre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/im_movie_minute_icon"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</FrameLayout>
