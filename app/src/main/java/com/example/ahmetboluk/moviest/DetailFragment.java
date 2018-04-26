@@ -1,52 +1,55 @@
 package com.example.ahmetboluk.moviest;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.ahmetboluk.moviest.Api.TmdbApi;
+import com.example.ahmetboluk.moviest.Data.detail.Result;
+import com.example.ahmetboluk.moviest.Data.detail.Cast;
+import com.example.ahmetboluk.moviest.Data.detail.Detail;
+import com.example.ahmetboluk.moviest.adapter.CastingAdapter;
+import com.example.ahmetboluk.moviest.adapter.SimilarMovieAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DetailFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DetailFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class DetailFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    RecyclerView castRecyclerView;
+    RecyclerView similarRecyclerView;
+    CastingAdapter castingAdapter;
+    SimilarMovieAdapter similarMovieAdapter;
+    LinearLayoutManager similarlayoutManager,castinglayoutManager;
+    Detail movieDetail;
+    TextView titleText,dateText,minuteText,genreText,nationText,scoreText,owerviewText;
+    ImageView movieImage;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    public static final String API_KEY="31b2377287f733ce461c2d352a64060e";
+    Retrofit api =new Retrofit.Builder().baseUrl("https://api.themoviedb.org/3/").addConverterFactory(GsonConverterFactory.create()).build();
 
     public DetailFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DetailFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DetailFragment newInstance(String param1, String param2) {
+    public static DetailFragment newInstance() {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,55 +57,57 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+            api.create(TmdbApi.class).listDetail(getArguments().getInt("movie_id"),API_KEY,"credits,similar").enqueue(new Callback<Detail>() {
+                @Override
+                public void onResponse(Call<Detail> call, Response<Detail> response) {
+                    Log.d("URL",call.request().url().toString());
+                    movieDetail=response.body();
+                    Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185"+movieDetail.getPosterPath()).into(movieImage);
+                    titleText.setText(movieDetail.getTitle());
+                    dateText.setText(movieDetail.getReleaseDate().substring(0,4));
+                    minuteText.setText(movieDetail.getRuntime().toString());
+                    genreText.setText(movieDetail.getGenres().get(0).getName());
+                    nationText.setText(movieDetail.getProductionCountries().get(0).getName());
+                    scoreText.setText(movieDetail.getVoteAverage().toString());
+                    owerviewText.setText(movieDetail.getOverview());
+                    castingAdapter = new CastingAdapter(getContext(), movieDetail.getCredits().getCast());
+                    castinglayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+                    castRecyclerView.setLayoutManager(castinglayoutManager);
+                    castRecyclerView.setAdapter(castingAdapter);
+                    similarMovieAdapter = new SimilarMovieAdapter(getContext(), movieDetail.getSimilar().getResults());
+                    similarlayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+                    similarRecyclerView.setLayoutManager(similarlayoutManager);
+                    similarRecyclerView.setAdapter(similarMovieAdapter);
+
+
+                }
+
+                @Override
+                public void onFailure(Call<Detail> call, Throwable t) {
+                    Log.d("Error","Olmadı amk");
+
+                }
+            });
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_detail,container,false);
+
+        movieImage = (ImageView) view.findViewById(R.id.iv_movie_jpeg);
+        titleText =(TextView) view.findViewById(R.id.tv_movie_title);
+        dateText=   (TextView) view.findViewById(R.id.tv_movie_date);
+        minuteText = (TextView) view.findViewById(R.id.tv_movie_minute);
+        genreText = (TextView) view.findViewById(R.id.tv_movie_genre);
+        nationText = (TextView) view.findViewById(R.id.tv_movie_nation);
+        scoreText = (TextView) view.findViewById(R.id.tv_movie_score);
+        owerviewText = (TextView) view.findViewById(R.id.tv_detail);
+        castRecyclerView = (RecyclerView) view.findViewById(R.id.rv_credits);
+        similarRecyclerView = (RecyclerView) view.findViewById(R.id.rv_similar_movie);
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

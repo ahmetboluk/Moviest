@@ -1,4 +1,4 @@
-package com.example.ahmetboluk.moviest;
+package com.example.ahmetboluk.moviest.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.ahmetboluk.moviest.Data.Result;
+import com.example.ahmetboluk.moviest.R;
 
 import java.util.List;
 
@@ -30,7 +31,6 @@ import java.util.List;
                 title = (TextView) view.findViewById(R.id.title);
                 count = (TextView) view.findViewById(R.id.count);
                 date = (TextView) view.findViewById(R.id.date);
-
                 thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             }
         }
@@ -54,19 +54,16 @@ import java.util.List;
             holder.count.setText(((pageDataList.get(position).getVoteAverage().toString())));
             holder.date.setText(pageDataList.get(position).getReleaseDate().substring(0,4));
             Glide.with(mContext)
-                    .load("https://image.tmdb.org/t/p/w200"+pageDataList.get(position).getPosterPath())
+                    .load("https://image.tmdb.org/t/p/w185"+pageDataList.get(position).getPosterPath())
                     .into(holder.thumbnail);
-            //holder.title.setText(album.getName());
-            //holder.count.setText(album.getNumOfSongs() + " songs");
-
-            // loading album cover using Glide library
-            //Glide.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
-
         }
 
         @Override
         public int getItemCount() {
             return pageDataList.size();
+        }
+        public Result getItem(int id){
+            return pageDataList.get(id);
         }
     }
 

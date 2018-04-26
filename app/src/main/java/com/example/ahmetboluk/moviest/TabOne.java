@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.ahmetboluk.moviest.Api.TmdbApi;
 import com.example.ahmetboluk.moviest.Data.PageData;
 import com.example.ahmetboluk.moviest.Data.Result;
+import com.example.ahmetboluk.moviest.adapter.MoviesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +113,26 @@ public class TabOne extends Fragment {
                 }
             }
         });
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(),recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        DetailFragment detailFragment = new DetailFragment();
+                        Bundle data=new Bundle();
+                        data.putInt("movie_id",adapter.getItem(position).getId());
+                        detailFragment.setArguments(data);
+                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_activity,detailFragment,null);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+                })
+        );
         return view;
 
     }
@@ -153,6 +175,7 @@ public class TabOne extends Fragment {
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+
     }
 
 }
