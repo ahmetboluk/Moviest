@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity implements TabThree.OnFragmentInteractionListener,TabFour.OnFragmentInteractionListener{
+import com.example.ahmetboluk.moviest.MyFragment.mainTabItem.PagerAdapter;
+import com.example.ahmetboluk.moviest.MyFragment.mainTabItem.TabFour;
+
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +22,11 @@ public class MainActivity extends AppCompatActivity implements TabThree.OnFragme
         }
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText("Genres"));
         tabLayout.addTab(tabLayout.newTab().setText("Popular"));
         tabLayout.addTab(tabLayout.newTab().setText("Top Rated"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab Three"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab Four"));
+        tabLayout.addTab(tabLayout.newTab().setText("Now Playing"));
+        tabLayout.addTab(tabLayout.newTab().setText("Up Coming"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -52,8 +55,5 @@ public class MainActivity extends AppCompatActivity implements TabThree.OnFragme
 
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
-    }
 }

@@ -3,9 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TabOne"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MyFragment.mainTabItem.TabOne"
     android:background="@color/colorPrimary"
     android:id="@+id/fragment_tab_one">
+
+    <ImageView
+        android:scaleType="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/im_loading"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/loading"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

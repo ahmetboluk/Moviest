@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.ahmetboluk.moviest.Data.detail.Cast;
+import com.example.ahmetboluk.moviest.Data.movieDetail.Cast;
 import com.example.ahmetboluk.moviest.R;
 
 import java.util.List;

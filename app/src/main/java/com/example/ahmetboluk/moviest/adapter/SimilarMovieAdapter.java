@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.example.ahmetboluk.moviest.Data.detail.Result;
+import com.example.ahmetboluk.moviest.Data.movieDetail.Result;
 import com.example.ahmetboluk.moviest.R;
 
 import java.util.List;
@@ -40,6 +40,9 @@ public class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapte
     @Override
     public int getItemCount() {
         return resultList.size();
+    }
+
+    public Result getItem(int position) { return resultList.get(position);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

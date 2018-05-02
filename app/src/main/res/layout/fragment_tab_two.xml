@@ -3,14 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TabTwo"
-    android:background="@color/colorPrimary">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MyFragment.mainTabItem.TabTwo"
+    android:background="@color/colorPrimary"
+    android:id="@+id/fragment_tab_two">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:scaleType="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/im_loading"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/loading"
+        />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:scrollbars="vertical" />
+
 </RelativeLayout>
