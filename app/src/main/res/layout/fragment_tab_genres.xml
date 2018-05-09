@@ -3,7 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyFragment.mainTabItem.TabGenres">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MyFragment.mainTabItem.TabGenres"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:scaleType="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/im_loading"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/loading"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

@@ -2,6 +2,7 @@ package com.example.ahmetboluk.moviest.Api;
 
 import com.example.ahmetboluk.moviest.Data.Genres;
 import com.example.ahmetboluk.moviest.Data.PageData;
+import com.example.ahmetboluk.moviest.Data.SeriesPageData;
 import com.example.ahmetboluk.moviest.Data.movieDetail.Detail;
 import com.example.ahmetboluk.moviest.Data.peopleDetail.PersonDetail;
 
@@ -23,7 +24,6 @@ public interface TmdbApi {
     @GET("movie/upcoming")
     Call<PageData> listUpComing(@Query("api_key") String apikey, @Query("page") int page);
 
-
     @GET("movie/{movie_id}")
     Call<Detail> listDetail(@Path("movie_id") int movie_id, @Query("api_key") String apikey, @Query("append_to_response") String appendToResponse);
 
@@ -35,4 +35,22 @@ public interface TmdbApi {
 
     @GET("discover/movie")
     Call<PageData> listGenreMovie( @Query("api_key") String apikey, @Query("page") int page, @Query("with_genres") int genre_id);
+
+    @GET("tv/popular")
+    Call<SeriesPageData> listSeriesPopular(@Query("api_key") String apikey, @Query("page") int page);
+
+
+    @GET("tv/top_rated")
+    Call<SeriesPageData> listSeriesTopRated(@Query("api_key") String apikey, @Query("page") int page);
+
+    @GET("tv/airing_today")
+    Call<SeriesPageData> listSeriesAiringToday(@Query("api_key") String apikey, @Query("page") int page);
+
+    @GET("tv/on_the_air")
+    Call<SeriesPageData> listSeriesOnTheAir(@Query("api_key") String apikey, @Query("page") int page);
+
+    @GET("tv/{tv_id}")
+    Call<Detail> listSeriesDetail(@Path("tv_id") int tv_id, @Query("api_key") String apikey, @Query("append_to_response") String appendToResponse);
+
+
 }

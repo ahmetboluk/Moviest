@@ -1,5 +1,6 @@
 package com.example.ahmetboluk.moviest.MyFragment.mainTabItem;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -8,9 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.ahmetboluk.moviest.Api.TmdbApi;
 import com.example.ahmetboluk.moviest.Data.Genres;
+import com.example.ahmetboluk.moviest.MyFragment.BottomTabLayotListener;
 import com.example.ahmetboluk.moviest.MyFragment.GenreDetailFragment;
 import com.example.ahmetboluk.moviest.R;
 import com.example.ahmetboluk.moviest.RecyclerItemClickListener;
@@ -23,7 +26,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class TabGenres extends Fragment {
+public class TabGenres extends Fragment implements BottomTabLayotListener {
+
+    AnimationDrawable animation;
 
     public RecyclerView genreRecyclerView;
     public Genres mGenres;
@@ -47,6 +52,7 @@ public class TabGenres extends Fragment {
                 mGenresAdapter = new GenresAdapter(getContext(),mGenres);
                 genreRecyclerView.setLayoutManager(mLayoutManager);
                 genreRecyclerView.setAdapter(mGenresAdapter);
+                animation.stop();
 
             }
 
@@ -63,6 +69,11 @@ public class TabGenres extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_tab_genres, container, false);
+
+        ImageView loading = (ImageView) view.findViewById(R.id.im_loading);
+        animation= (AnimationDrawable)loading.getDrawable();
+        animation.start();
+
         genreRecyclerView = view.findViewById(R.id.rv_genre_name);
         genreRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), genreRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -86,4 +97,13 @@ public class TabGenres extends Fragment {
         return view;
     }
 
+    @Override
+    public void onMovieSelected() {
+
+    }
+
+    @Override
+    public void onSeriesSelected() {
+
+    }
 }

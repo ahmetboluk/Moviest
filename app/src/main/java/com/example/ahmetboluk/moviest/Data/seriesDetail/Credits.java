@@ -1,10 +1,9 @@
-package com.example.ahmetboluk.moviest.Data.peopleDetail;
-import java.io.Serializable;
+package com.example.ahmetboluk.moviest.Data.seriesDetail;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class MovieCredits  implements Serializable {
+public class Credits {
 
     @SerializedName("cast")
     @Expose

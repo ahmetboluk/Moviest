@@ -1,10 +1,11 @@
 package com.example.ahmetboluk.moviest.Data.peopleDetail;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Cast_ {
+public class Cast_ implements Serializable {
 
     @SerializedName("poster_path")
     @Expose

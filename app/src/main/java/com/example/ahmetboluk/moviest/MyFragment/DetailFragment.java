@@ -14,10 +14,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.ahmetboluk.moviest.Api.TmdbApi;
 import com.example.ahmetboluk.moviest.Data.movieDetail.Detail;
+import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabOne;
+import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabThree;
+import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabTwo;
 import com.example.ahmetboluk.moviest.R;
 import com.example.ahmetboluk.moviest.RecyclerItemClickListener;
 import com.example.ahmetboluk.moviest.adapter.CastingAdapter;
@@ -30,6 +34,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetailFragment extends Fragment {
+
+    private int SELECTED=0;
+    private int SELECTED_MOVIE=0;
+    private int SELECTED_TV=1;
+
     AnimationDrawable animation;
     RecyclerView castRecyclerView;
     RecyclerView similarRecyclerView;
@@ -40,6 +49,7 @@ public class DetailFragment extends Fragment {
     TextView titleText,dateText,minuteText,genreText,nationText,scoreText,owerviewText;
     ImageView movieImage;
     RelativeLayout relativeLayout;
+
 
     public static final String API_KEY="31b2377287f733ce461c2d352a64060e";
     Retrofit api =new Retrofit.Builder().baseUrl("https://api.themoviedb.org/3/").addConverterFactory(GsonConverterFactory.create()).build();
@@ -58,6 +68,8 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SELECTED=getArguments().getInt("selected");
+        if (SELECTED==SELECTED_MOVIE){
             api.create(TmdbApi.class).listDetail(getArguments().getInt("movie_id"),API_KEY,"credits,similar").enqueue(new Callback<Detail>() {
                 @Override
                 public void onResponse(Call<Detail> call, Response<Detail> response) {
@@ -75,6 +87,7 @@ public class DetailFragment extends Fragment {
                     castinglayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
                     castRecyclerView.setLayoutManager(castinglayoutManager);
                     castRecyclerView.setAdapter(castingAdapter);
+
                     similarMovieAdapter = new SimilarMovieAdapter(getContext(), movieDetail.getSimilar().getResults());
                     similarlayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
                     similarRecyclerView.setLayoutManager(similarlayoutManager);
@@ -89,6 +102,10 @@ public class DetailFragment extends Fragment {
 
                 }
             });
+        }else if (SELECTED==SELECTED_TV){
+            Toast.makeText(getContext(),"MALESEF BURAYI DAHA YAPAMADIM BU ARADA BİLMEK İSTERSENİZ DİZİNİN ID Sİ "+getArguments().getInt("series_id"), Toast.LENGTH_LONG).show();
+
+        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

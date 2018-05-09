@@ -11,15 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.example.ahmetboluk.moviest.Api.TmdbApi;
 import com.example.ahmetboluk.moviest.Data.peopleDetail.PersonDetail;
 import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeoplePagerAdapter;
 import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabOne;
+import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabThree;
 import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabTwo;
 import com.example.ahmetboluk.moviest.R;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,12 +31,11 @@ public class CastDetailFragment extends Fragment {
     Retrofit api =new Retrofit.Builder().baseUrl("https://api.themoviedb.org/3/").addConverterFactory(GsonConverterFactory.create()).build();
 
     PersonDetail personDetail;
-
     ImageView personImage,backgraundImage;
     TextView personName,personBirdDay,personNation;
 
     public CastDetailFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -45,24 +43,6 @@ public class CastDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        api.create(TmdbApi.class).listPersonDetail(getArguments().getInt("person_id"),API_KEY,"movie_credits,tv_credits").enqueue(new Callback<PersonDetail>() {
-            @Override
-            public void onResponse(Call<PersonDetail> call, Response<PersonDetail> response) {
-                personDetail = response.body();
-                Log.i("resim","https://image.tmdb.org/t/p/w185"+personDetail.getProfilePath());
-                Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185"+personDetail.getProfilePath()).into(personImage);
-                Glide.with(getContext()).load("https://image.tmdb.org/t/p/w200"+personDetail.getMovieCredits().getCast().get(0).getBackdropPath()).into(backgraundImage);
-                personName.setText(personDetail.getName());
-                personBirdDay.setText(personDetail.getBirthday());
-                personNation.setText(personDetail.getPlaceOfBirth());
-
-            }
-
-            @Override
-            public void onFailure(Call<PersonDetail> call, Throwable t) {
-
-            }
-        });
 
     }
 
@@ -76,33 +56,54 @@ public class CastDetailFragment extends Fragment {
         personBirdDay=(TextView) view.findViewById(R.id.tv_people_born_date);
         personNation=(TextView) view.findViewById(R.id.tv_people_nation);
 
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.people_tab_layout);
+        final TabLayout tabLayout = (TabLayout) view.findViewById(R.id.people_tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Description"));
         tabLayout.addTab(tabLayout.newTab().setText("Movie"));
         tabLayout.addTab(tabLayout.newTab().setText("TV"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.people_pager);
-        final PeoplePagerAdapter pagerAdapter = new PeoplePagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount());
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        viewPager.setOffscreenPageLimit(3);
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+        api.create(TmdbApi.class).listPersonDetail(getArguments().getInt("person_id"),API_KEY,"movie_credits,tv_credits").enqueue(new Callback<PersonDetail>() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+            public void onResponse(Call<PersonDetail> call, Response<PersonDetail> response) {
+                personDetail = response.body();
+                Log.i("resim","https://image.tmdb.org/t/p/w185"+personDetail.getProfilePath());
+                Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185"+personDetail.getProfilePath()).into(personImage);
+                Glide.with(getContext()).load("https://image.tmdb.org/t/p/w200"+personDetail.getMovieCredits().getCast().get(0).getBackdropPath()).into(backgraundImage);
+                personName.setText(personDetail.getName());
+                personBirdDay.setText(personDetail.getBirthday());
+                personNation.setText(personDetail.getPlaceOfBirth());
+
+                final PeoplePagerAdapter pagerAdapter = new PeoplePagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount(),personDetail);
+                viewPager.setAdapter(pagerAdapter);
+                viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                viewPager.setOffscreenPageLimit(3);
+                tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        viewPager.setCurrentItem(tab.getPosition());
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+
+                    }
+                });
+
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onFailure(Call<PersonDetail> call, Throwable t) {
 
             }
         });
+
 
 
         return view;
