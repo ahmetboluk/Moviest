@@ -52,7 +52,13 @@ import java.util.List;
         public void onBindViewHolder(final MyViewHolder holder, int position) {
             holder.title.setText(pageDataList.get(position).getTitle());
             holder.count.setText(((pageDataList.get(position).getVoteAverage().toString())));
-            holder.date.setText(pageDataList.get(position).getReleaseDate().substring(0,4));
+            if (pageDataList.get(position).getFirstAirDate()==null){
+                holder.date.setText(pageDataList.get(position).getReleaseDate().substring(0,4));
+            }
+            else if(pageDataList.get(position).getReleaseDate()==null){
+                holder.date.setText(pageDataList.get(position).getFirstAirDate().substring(0,4));
+
+            }
             Glide.with(mContext)
                     .load("https://image.tmdb.org/t/p/w185"+pageDataList.get(position).getPosterPath())
                     .into(holder.thumbnail);

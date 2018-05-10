@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.ahmetboluk.moviest.Api.TmdbApi;
 import com.example.ahmetboluk.moviest.Data.Genres;
@@ -31,8 +32,14 @@ public class TabGenres extends Fragment implements BottomTabLayotListener {
     AnimationDrawable animation;
 
     public RecyclerView genreRecyclerView;
-    public Genres mGenres;
-    private GenresAdapter mGenresAdapter;
+    public Genres mMovieGenres;
+    public Genres mSeriesGenres;
+    private GenresAdapter mMovieGenresAdapter;
+    private GenresAdapter mSeriesGenresAdapter;
+    private int SELECTED=0;
+    private int SELECTED_MOVIE=0;
+    private int SELECTED_TV=1;
+
     public RecyclerView.LayoutManager mLayoutManager;
 
     public static final String API_KEY="31b2377287f733ce461c2d352a64060e";
@@ -47,15 +54,14 @@ public class TabGenres extends Fragment implements BottomTabLayotListener {
         api.create(TmdbApi.class).listGenres(API_KEY).enqueue(new Callback<Genres>() {
             @Override
             public void onResponse(Call<Genres> call, Response<Genres> response) {
-                mGenres = response.body();
+                mMovieGenres = response.body();
                 mLayoutManager = new LinearLayoutManager(getContext());
-                mGenresAdapter = new GenresAdapter(getContext(),mGenres);
+                mMovieGenresAdapter = new GenresAdapter(getContext(),mMovieGenres);
                 genreRecyclerView.setLayoutManager(mLayoutManager);
-                genreRecyclerView.setAdapter(mGenresAdapter);
+                genreRecyclerView.setAdapter(mMovieGenresAdapter);
                 animation.stop();
 
             }
-
             @Override
             public void onFailure(Call<Genres> call, Throwable t) {
 
@@ -78,9 +84,16 @@ public class TabGenres extends Fragment implements BottomTabLayotListener {
         genreRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), genreRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+//                Toast.makeText(getContext(), "buuu"+mSeriesGenres.getGenres().get(position).getId().toString(), Toast.LENGTH_SHORT).show();
                 GenreDetailFragment genreDetailFragment = new GenreDetailFragment();
                 Bundle data = new Bundle();
-                data.putInt("genre_id",mGenres.getGenres().get(position).getId());
+                if(SELECTED==SELECTED_MOVIE) {
+                    data.putInt("genre_id", mMovieGenres.getGenres().get(position).getId());
+                }else if (SELECTED==SELECTED_TV){
+                    data.putInt("genre_id", mSeriesGenres.getGenres().get(position).getId());
+
+                }
+                data.putInt("selected",SELECTED);
                 genreDetailFragment.setArguments(data);
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.main_activity, genreDetailFragment,null);
@@ -99,11 +112,32 @@ public class TabGenres extends Fragment implements BottomTabLayotListener {
 
     @Override
     public void onMovieSelected() {
+        SELECTED=SELECTED_MOVIE;
+        genreRecyclerView.setAdapter(mMovieGenresAdapter);
 
     }
 
     @Override
     public void onSeriesSelected() {
+        SELECTED=SELECTED_TV;
+
+        animation.start();
+        api.create(TmdbApi.class).listSeriesGenres(API_KEY).enqueue(new Callback<Genres>() {
+            @Override
+            public void onResponse(Call<Genres> call, Response<Genres> response) {
+                mSeriesGenres = response.body();
+                mLayoutManager = new LinearLayoutManager(getContext());
+                mSeriesGenresAdapter = new GenresAdapter(getContext(),mSeriesGenres);
+                genreRecyclerView.setLayoutManager(mLayoutManager);
+                genreRecyclerView.setAdapter(mSeriesGenresAdapter);
+                animation.stop();
+
+            }
+            @Override
+            public void onFailure(Call<Genres> call, Throwable t) {
+
+            }
+        });
 
     }
 }

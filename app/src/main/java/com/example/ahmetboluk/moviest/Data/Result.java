@@ -50,6 +50,9 @@ public class Result {
         @SerializedName("release_date")
         @Expose
         private String releaseDate;
+        @SerializedName("first_air_date")
+        @Expose
+        private String firstAirDate;
 
         public Integer getVoteCount() {
             return voteCount;
@@ -163,5 +166,8 @@ public class Result {
             this.releaseDate = releaseDate;
         }
 
+        public String getFirstAirDate() { return firstAirDate; }
+
+        public void setFirstAirDate(String firstAirDate) { this.firstAirDate = firstAirDate; }
 
 }

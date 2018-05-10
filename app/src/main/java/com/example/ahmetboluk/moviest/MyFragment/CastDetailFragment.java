@@ -1,6 +1,7 @@
 package com.example.ahmetboluk.moviest.MyFragment;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.ahmetboluk.moviest.Api.TmdbApi;
@@ -29,6 +31,8 @@ public class CastDetailFragment extends Fragment {
 
     public static final String API_KEY="31b2377287f733ce461c2d352a64060e";
     Retrofit api =new Retrofit.Builder().baseUrl("https://api.themoviedb.org/3/").addConverterFactory(GsonConverterFactory.create()).build();
+    AnimationDrawable animation;
+    RelativeLayout relativeLayout;
 
     PersonDetail personDetail;
     ImageView personImage,backgraundImage;
@@ -50,6 +54,13 @@ public class CastDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_cast_detail, container, false);
+
+        final ImageView loading = (ImageView) view.findViewById(R.id.im_loading);
+        animation= (AnimationDrawable)loading.getDrawable();
+        animation.start();
+
+        relativeLayout = (RelativeLayout) view.findViewById(R.id.rl_people_layout);
+
         personImage=(ImageView) view.findViewById(R.id.iv_people_image);
         backgraundImage=(ImageView) view.findViewById(R.id.iv_person_background);
         personName=(TextView) view.findViewById(R.id.tv_people_name);
@@ -95,6 +106,9 @@ public class CastDetailFragment extends Fragment {
 
                     }
                 });
+                animation.stop();
+                loading.setVisibility(View.INVISIBLE);
+                relativeLayout.setVisibility(View.VISIBLE);
 
             }
 

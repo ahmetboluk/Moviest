@@ -14,11 +14,23 @@
         android:layout_height="fill_parent"
         android:fillViewport="true">
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent">
+            <ImageView
+                android:id="@+id/im_loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:scaleType="center"
+                app:srcCompat="@drawable/loading"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"/>
+
+        <RelativeLayout
             android:id="@+id/rl_people_layout"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            >
-
+            android:visibility="invisible">
             <ImageView
                 android:id="@+id/iv_person_background"
                 android:layout_width="match_parent"
@@ -78,7 +90,10 @@
                 android:layout_height="20dp"
                 android:layout_margin="15dp"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                android:layout_centerHorizontal="true"></android.support.design.widget.TabLayout>
+                android:layout_centerHorizontal="true"
+                app:tabMode="scrollable"
+
+                ></android.support.design.widget.TabLayout>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/people_pager"
@@ -88,6 +103,7 @@
                 android:background="@color/colorPrimary">
 
             </android.support.v4.view.ViewPager>
+        </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
 

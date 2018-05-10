@@ -32,8 +32,8 @@ public class TvAdapter extends RecyclerView.Adapter<TvAdapter.MyViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.title.setText(mSeriesResult.get(position).getName());
-        holder.count.setText(mSeriesResult.get(position).getVoteCount().toString());
-        holder.date.setText(mSeriesResult.get(position).getFirstAirDate());
+        holder.count.setText(mSeriesResult.get(position).getVoteAverage().toString());
+        holder.date.setText(mSeriesResult.get(position).getFirstAirDate().substring(0,4));
         Glide.with(mContext).load("https://image.tmdb.org/t/p/w185"+mSeriesResult.get(position).getPosterPath()).into(holder.thumbnail);
 
     }

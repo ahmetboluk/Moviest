@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.ahmetboluk.moviest.Api.TmdbApi;
 import com.example.ahmetboluk.moviest.Data.movieDetail.Detail;
+import com.example.ahmetboluk.moviest.Data.seriesDetail.SeriesDetail;
 import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabOne;
 import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabThree;
 import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabTwo;
@@ -49,6 +51,9 @@ public class DetailFragment extends Fragment {
     TextView titleText,dateText,minuteText,genreText,nationText,scoreText,owerviewText;
     ImageView movieImage;
     RelativeLayout relativeLayout;
+    ActionBar actionBar;
+    ImageView loading;
+    int birkere =0;
 
 
     public static final String API_KEY="31b2377287f733ce461c2d352a64060e";
@@ -68,6 +73,9 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         SELECTED=getArguments().getInt("selected");
         if (SELECTED==SELECTED_MOVIE){
             api.create(TmdbApi.class).listDetail(getArguments().getInt("movie_id"),API_KEY,"credits,similar").enqueue(new Callback<Detail>() {
@@ -93,7 +101,10 @@ public class DetailFragment extends Fragment {
                     similarRecyclerView.setLayoutManager(similarlayoutManager);
                     similarRecyclerView.setAdapter(similarMovieAdapter);
                     animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+
                     relativeLayout.setVisibility(View.VISIBLE);
+                    birkere=1;
                 }
 
                 @Override
@@ -104,7 +115,17 @@ public class DetailFragment extends Fragment {
             });
         }else if (SELECTED==SELECTED_TV){
             Toast.makeText(getContext(),"MALESEF BURAYI DAHA YAPAMADIM BU ARADA BİLMEK İSTERSENİZ DİZİNİN ID Sİ "+getArguments().getInt("series_id"), Toast.LENGTH_LONG).show();
+            api.create(TmdbApi.class).listSeriesDetail(getArguments().getInt("series_id"),API_KEY,"credits,similar").enqueue(new Callback<SeriesDetail>() {
+                @Override
+                public void onResponse(Call<SeriesDetail> call, Response<SeriesDetail> response) {
 
+                }
+
+                @Override
+                public void onFailure(Call<SeriesDetail> call, Throwable t) {
+
+                }
+            });
         }
     }
     @Override
@@ -112,7 +133,7 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail,container,false);
 
-        ImageView loading = (ImageView) view.findViewById(R.id.im_loading);
+        loading = (ImageView) view.findViewById(R.id.im_loading);
         animation= (AnimationDrawable)loading.getDrawable();
         animation.start();
 
@@ -166,6 +187,28 @@ public class DetailFragment extends Fragment {
                     }
                 })
         );
+        if (birkere==1){
+            Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185"+movieDetail.getPosterPath()).into(movieImage);
+            titleText.setText(movieDetail.getTitle());
+            dateText.setText(movieDetail.getReleaseDate().substring(0,4));
+            minuteText.setText(movieDetail.getRuntime().toString());
+            genreText.setText(movieDetail.getGenres().get(0).getName());
+            nationText.setText(movieDetail.getProductionCountries().get(0).getName());
+            scoreText.setText(movieDetail.getVoteAverage().toString());
+            owerviewText.setText(movieDetail.getOverview());
+            castingAdapter = new CastingAdapter(getContext(), movieDetail.getCredits().getCast());
+            castinglayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+            castRecyclerView.setLayoutManager(castinglayoutManager);
+            castRecyclerView.setAdapter(castingAdapter);
+
+            similarMovieAdapter = new SimilarMovieAdapter(getContext(), movieDetail.getSimilar().getResults());
+            similarlayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+            similarRecyclerView.setLayoutManager(similarlayoutManager);
+            similarRecyclerView.setAdapter(similarMovieAdapter);
+            animation.stop();
+            relativeLayout.setVisibility(View.VISIBLE);
+
+        }
         return view;
     }
 
@@ -173,10 +216,16 @@ public class DetailFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

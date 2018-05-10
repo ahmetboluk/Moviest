@@ -5,6 +5,7 @@ import com.example.ahmetboluk.moviest.Data.PageData;
 import com.example.ahmetboluk.moviest.Data.SeriesPageData;
 import com.example.ahmetboluk.moviest.Data.movieDetail.Detail;
 import com.example.ahmetboluk.moviest.Data.peopleDetail.PersonDetail;
+import com.example.ahmetboluk.moviest.Data.seriesDetail.SeriesDetail;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -50,7 +51,13 @@ public interface TmdbApi {
     Call<SeriesPageData> listSeriesOnTheAir(@Query("api_key") String apikey, @Query("page") int page);
 
     @GET("tv/{tv_id}")
-    Call<Detail> listSeriesDetail(@Path("tv_id") int tv_id, @Query("api_key") String apikey, @Query("append_to_response") String appendToResponse);
+    Call<SeriesDetail> listSeriesDetail(@Path("tv_id") int tv_id, @Query("api_key") String apikey, @Query("append_to_response") String appendToResponse);
+
+    @GET("genre/tv/list")
+    Call<Genres> listSeriesGenres(@Query("api_key") String apikey);
+
+    @GET("discover/tv")
+    Call<PageData> listGenreSeries( @Query("api_key") String apikey, @Query("page") int page, @Query("with_genres") int genre_id);
 
 
 }
