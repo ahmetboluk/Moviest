@@ -27,7 +27,9 @@ import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabTwo;
 import com.example.ahmetboluk.moviest.R;
 import com.example.ahmetboluk.moviest.RecyclerItemClickListener;
 import com.example.ahmetboluk.moviest.adapter.CastingAdapter;
+import com.example.ahmetboluk.moviest.adapter.SeriesCastingAdapter;
 import com.example.ahmetboluk.moviest.adapter.SimilarMovieAdapter;
+import com.example.ahmetboluk.moviest.adapter.SimilarSeriesAdapter;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,9 +47,12 @@ public class DetailFragment extends Fragment {
     RecyclerView castRecyclerView;
     RecyclerView similarRecyclerView;
     CastingAdapter castingAdapter;
+    SeriesCastingAdapter seriesCastingAdapter;
     SimilarMovieAdapter similarMovieAdapter;
-    LinearLayoutManager similarlayoutManager,castinglayoutManager;
+    SimilarSeriesAdapter similarSeriesAdapter;
+    LinearLayoutManager similarlayoutManager,castinglayoutManager,seriesCastinglayoutManager,similarSerieslayoutManager;
     Detail movieDetail;
+    SeriesDetail seriesDetail;
     TextView titleText,dateText,minuteText,genreText,nationText,scoreText,owerviewText;
     ImageView movieImage;
     RelativeLayout relativeLayout;
@@ -118,6 +123,30 @@ public class DetailFragment extends Fragment {
             api.create(TmdbApi.class).listSeriesDetail(getArguments().getInt("series_id"),API_KEY,"credits,similar").enqueue(new Callback<SeriesDetail>() {
                 @Override
                 public void onResponse(Call<SeriesDetail> call, Response<SeriesDetail> response) {
+                    seriesDetail=response.body();
+                    Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185"+seriesDetail.getPosterPath()).into(movieImage);
+                    titleText.setText(seriesDetail.getName());
+                    dateText.setText(seriesDetail.getFirstAirDate().substring(0,4));
+                    minuteText.setText(seriesDetail.getEpisodeRunTime().get(0).toString());
+                    genreText.setText(seriesDetail.getGenres().get(0).getName());
+                    nationText.setText(seriesDetail.getOriginCountry().get(0));
+                    scoreText.setText(seriesDetail.getVoteAverage().toString());
+                    owerviewText.setText(seriesDetail.getOverview());
+                    seriesCastingAdapter = new SeriesCastingAdapter(getContext(), seriesDetail.getCredits().getCast());
+                    seriesCastinglayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+                    castRecyclerView.setLayoutManager(seriesCastinglayoutManager);
+                    castRecyclerView.setAdapter(seriesCastingAdapter);
+
+                    similarSeriesAdapter = new SimilarSeriesAdapter(getContext(), seriesDetail.getSimilar().getResults());
+                    similarSerieslayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+                    similarRecyclerView.setLayoutManager(similarSerieslayoutManager);
+                    similarRecyclerView.setAdapter(similarSeriesAdapter);
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+
+                    relativeLayout.setVisibility(View.VISIBLE);
+                    birkere=1;
+
 
                 }
 
@@ -154,7 +183,12 @@ public class DetailFragment extends Fragment {
                     public void onItemClick(View view, int position) {
                         DetailFragment detailFragment = new DetailFragment();
                         Bundle data=new Bundle();
-                        data.putInt("movie_id",similarMovieAdapter.getItem(position).getId());
+                        if(SELECTED==SELECTED_MOVIE) {
+                            data.putInt("movie_id", similarMovieAdapter.getItem(position).getId());
+                        }else if(SELECTED==SELECTED_TV){
+                            data.putInt("series_id", similarSeriesAdapter.getItem(position).getId());
+                        }
+                        data.putInt("selected",SELECTED);
                         detailFragment.setArguments(data);
                         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.main_activity,detailFragment,null);
@@ -173,7 +207,12 @@ public class DetailFragment extends Fragment {
                     public void onItemClick(View view, int position) {
                         CastDetailFragment castDetailFragment = new CastDetailFragment();
                         Bundle data=new Bundle();
-                        data.putInt("person_id",movieDetail.getCredits().getCast().get(position).getId());
+                        if(SELECTED==SELECTED_MOVIE) {
+                            data.putInt("person_id",movieDetail.getCredits().getCast().get(position).getId());
+                        }else if(SELECTED==SELECTED_TV){
+                            data.putInt("person_id",seriesDetail.getCredits().getCast().get(position).getId());
+                        }
+                        data.putInt("selected",SELECTED);
                         castDetailFragment.setArguments(data);
                         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.main_activity,castDetailFragment,null);
@@ -188,26 +227,49 @@ public class DetailFragment extends Fragment {
                 })
         );
         if (birkere==1){
-            Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185"+movieDetail.getPosterPath()).into(movieImage);
-            titleText.setText(movieDetail.getTitle());
-            dateText.setText(movieDetail.getReleaseDate().substring(0,4));
-            minuteText.setText(movieDetail.getRuntime().toString());
-            genreText.setText(movieDetail.getGenres().get(0).getName());
-            nationText.setText(movieDetail.getProductionCountries().get(0).getName());
-            scoreText.setText(movieDetail.getVoteAverage().toString());
-            owerviewText.setText(movieDetail.getOverview());
-            castingAdapter = new CastingAdapter(getContext(), movieDetail.getCredits().getCast());
-            castinglayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
-            castRecyclerView.setLayoutManager(castinglayoutManager);
-            castRecyclerView.setAdapter(castingAdapter);
+            if(SELECTED==SELECTED_MOVIE) {
+                Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185" + movieDetail.getPosterPath()).into(movieImage);
+                titleText.setText(movieDetail.getTitle());
+                dateText.setText(movieDetail.getReleaseDate().substring(0, 4));
+                minuteText.setText(movieDetail.getRuntime().toString());
+                genreText.setText(movieDetail.getGenres().get(0).getName());
+                nationText.setText(movieDetail.getProductionCountries().get(0).getName());
+                scoreText.setText(movieDetail.getVoteAverage().toString());
+                owerviewText.setText(movieDetail.getOverview());
+                castingAdapter = new CastingAdapter(getContext(), movieDetail.getCredits().getCast());
+                castinglayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                castRecyclerView.setLayoutManager(castinglayoutManager);
+                castRecyclerView.setAdapter(castingAdapter);
 
-            similarMovieAdapter = new SimilarMovieAdapter(getContext(), movieDetail.getSimilar().getResults());
-            similarlayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
-            similarRecyclerView.setLayoutManager(similarlayoutManager);
-            similarRecyclerView.setAdapter(similarMovieAdapter);
-            animation.stop();
-            relativeLayout.setVisibility(View.VISIBLE);
+                similarMovieAdapter = new SimilarMovieAdapter(getContext(), movieDetail.getSimilar().getResults());
+                similarlayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                similarRecyclerView.setLayoutManager(similarlayoutManager);
+                similarRecyclerView.setAdapter(similarMovieAdapter);
+                animation.stop();
+                relativeLayout.setVisibility(View.VISIBLE);
+            }else if (SELECTED==SELECTED_TV){
+                Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185"+seriesDetail.getPosterPath()).into(movieImage);
+                titleText.setText(seriesDetail.getName());
+                dateText.setText(seriesDetail.getFirstAirDate().substring(0,4));
+                minuteText.setText(seriesDetail.getEpisodeRunTime().get(0).toString());
+                genreText.setText(seriesDetail.getGenres().get(0).getName());
+                nationText.setText(seriesDetail.getOriginCountry().get(0));
+                scoreText.setText(seriesDetail.getVoteAverage().toString());
+                owerviewText.setText(seriesDetail.getOverview());
+                seriesCastingAdapter = new SeriesCastingAdapter(getContext(), seriesDetail.getCredits().getCast());
+                seriesCastinglayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+                castRecyclerView.setLayoutManager(seriesCastinglayoutManager);
+                castRecyclerView.setAdapter(seriesCastingAdapter);
 
+                similarSeriesAdapter = new SimilarSeriesAdapter(getContext(), seriesDetail.getSimilar().getResults());
+                similarSerieslayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+                similarRecyclerView.setLayoutManager(similarSerieslayoutManager);
+                similarRecyclerView.setAdapter(similarSeriesAdapter);
+                animation.stop();
+                loading.setVisibility(View.INVISIBLE);
+
+                relativeLayout.setVisibility(View.VISIBLE);
+            }
         }
         return view;
     }

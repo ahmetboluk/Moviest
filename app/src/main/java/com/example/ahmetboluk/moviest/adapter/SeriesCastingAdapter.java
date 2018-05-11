@@ -10,18 +10,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.ahmetboluk.moviest.Data.movieDetail.Cast;
-
+import com.example.ahmetboluk.moviest.Data.seriesDetail.Cast;
 import com.example.ahmetboluk.moviest.R;
 
 import java.util.List;
 
-public class CastingAdapter extends RecyclerView.Adapter<CastingAdapter.MyViewHolder>{
+public class SeriesCastingAdapter extends RecyclerView.Adapter<SeriesCastingAdapter.MyViewHolder>{
 
     private Context mContext;
     private List<Cast> mCasts;
 
-    public CastingAdapter (Context context, List<Cast> casts){
+    public SeriesCastingAdapter (Context context, List<Cast> casts){
         mContext = context;
         mCasts = casts;
     }
@@ -40,13 +39,9 @@ public class CastingAdapter extends RecyclerView.Adapter<CastingAdapter.MyViewHo
     }
 
     @Override
-    public int getItemCount() {
-        return mCasts.size();
-    }
+    public int getItemCount() { return mCasts.size(); }
 
-    public void setItems(List<Cast> items) {
-        this.mCasts = items;
-    }
+    public void setItems(List<Cast> items) { this.mCasts = items; }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -55,8 +50,11 @@ public class CastingAdapter extends RecyclerView.Adapter<CastingAdapter.MyViewHo
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
             textView = (TextView) itemView.findViewById(R.id.tv_casting_name);
             imageView = (ImageView) itemView.findViewById(R.id.im_casting_image);
         }
     }
 }
+
+
