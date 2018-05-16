@@ -42,6 +42,7 @@ public class PersonDetailAdapter extends RecyclerView.Adapter<PersonDetailAdapte
             return mpersonDetail.getMovieCredits().getCast().size();
     }
 
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;

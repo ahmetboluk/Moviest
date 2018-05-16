@@ -37,6 +37,12 @@ public class CastDetailFragment extends Fragment {
     PersonDetail personDetail;
     ImageView personImage,backgraundImage;
     TextView personName,personBirdDay,personNation;
+    ViewPager viewPager;
+    PeoplePagerAdapter pagerAdapter;
+    TabLayout tabLayout;
+
+
+    int birkere;
 
     public CastDetailFragment() {
 
@@ -58,7 +64,7 @@ public class CastDetailFragment extends Fragment {
         final ImageView loading = (ImageView) view.findViewById(R.id.im_loading);
         animation= (AnimationDrawable)loading.getDrawable();
         animation.start();
-
+        if (birkere==0){
         relativeLayout = (RelativeLayout) view.findViewById(R.id.rl_people_layout);
 
         personImage=(ImageView) view.findViewById(R.id.iv_people_image);
@@ -67,13 +73,13 @@ public class CastDetailFragment extends Fragment {
         personBirdDay=(TextView) view.findViewById(R.id.tv_people_born_date);
         personNation=(TextView) view.findViewById(R.id.tv_people_nation);
 
-        final TabLayout tabLayout = (TabLayout) view.findViewById(R.id.people_tab_layout);
+        tabLayout = (TabLayout) view.findViewById(R.id.people_tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Description"));
         tabLayout.addTab(tabLayout.newTab().setText("Movie"));
         tabLayout.addTab(tabLayout.newTab().setText("TV"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.people_pager);
+        viewPager = (ViewPager) view.findViewById(R.id.people_pager);
 
         api.create(TmdbApi.class).listPersonDetail(getArguments().getInt("person_id"),API_KEY,"movie_credits,tv_credits").enqueue(new Callback<PersonDetail>() {
             @Override
@@ -86,7 +92,7 @@ public class CastDetailFragment extends Fragment {
                 personBirdDay.setText(personDetail.getBirthday());
                 personNation.setText(personDetail.getPlaceOfBirth());
 
-                final PeoplePagerAdapter pagerAdapter = new PeoplePagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount(),personDetail);
+                pagerAdapter = new PeoplePagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount(),personDetail);
                 viewPager.setAdapter(pagerAdapter);
                 viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
                 viewPager.setOffscreenPageLimit(3);
@@ -109,6 +115,8 @@ public class CastDetailFragment extends Fragment {
                 animation.stop();
                 loading.setVisibility(View.INVISIBLE);
                 relativeLayout.setVisibility(View.VISIBLE);
+                birkere=1;
+
 
             }
 
@@ -116,7 +124,38 @@ public class CastDetailFragment extends Fragment {
             public void onFailure(Call<PersonDetail> call, Throwable t) {
 
             }
-        });
+        });}
+        else if ( birkere==1){
+            Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185"+personDetail.getProfilePath()).into(personImage);
+            Glide.with(getContext()).load("https://image.tmdb.org/t/p/w200"+personDetail.getMovieCredits().getCast().get(0).getBackdropPath()).into(backgraundImage);
+            personName.setText(personDetail.getName());
+            personBirdDay.setText(personDetail.getBirthday());
+            personNation.setText(personDetail.getPlaceOfBirth());
+
+            pagerAdapter = new PeoplePagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount(),personDetail);
+            viewPager.setAdapter(pagerAdapter);
+            viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+            viewPager.setOffscreenPageLimit(3);
+            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    viewPager.setCurrentItem(tab.getPosition());
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
+            animation.stop();
+            loading.setVisibility(View.INVISIBLE);
+            relativeLayout.setVisibility(View.VISIBLE);
+        }
 
 
 

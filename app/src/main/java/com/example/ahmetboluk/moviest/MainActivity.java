@@ -1,6 +1,9 @@
 package com.example.ahmetboluk.moviest;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +26,13 @@ public class MainActivity extends AppCompatActivity {
     private static final int MOVIES_SELECTED = 0;
     private static final int SERIES_SELECTED = 1;
 
+    private static Context mContext;
+
+
+    public static Context getAppContext() {
+        return mContext;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.INTERNET},0);
         }
+        mContext=getApplicationContext();
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Genres"));
@@ -119,5 +130,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
 }
+

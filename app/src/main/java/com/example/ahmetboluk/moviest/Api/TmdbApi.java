@@ -1,6 +1,7 @@
 package com.example.ahmetboluk.moviest.Api;
 
 import com.example.ahmetboluk.moviest.Data.Genres;
+import com.example.ahmetboluk.moviest.Data.Videos;
 import com.example.ahmetboluk.moviest.Data.PageData;
 import com.example.ahmetboluk.moviest.Data.SeriesPageData;
 import com.example.ahmetboluk.moviest.Data.movieDetail.Detail;
@@ -40,7 +41,6 @@ public interface TmdbApi {
     @GET("tv/popular")
     Call<SeriesPageData> listSeriesPopular(@Query("api_key") String apikey, @Query("page") int page);
 
-
     @GET("tv/top_rated")
     Call<SeriesPageData> listSeriesTopRated(@Query("api_key") String apikey, @Query("page") int page);
 
@@ -58,6 +58,12 @@ public interface TmdbApi {
 
     @GET("discover/tv")
     Call<PageData> listGenreSeries( @Query("api_key") String apikey, @Query("page") int page, @Query("with_genres") int genre_id);
+
+    @GET("movie/{movie_id}/videos")
+    Call<Videos> listMovieVideos (@Path("movie_id") int movie_id, @Query("api_key") String apikey);
+
+    @GET("tv/{tv_id}/videos")
+    Call<Videos> listTvVideos (@Path("tv_id") int movie_id, @Query("api_key") String apikey);
 
 
 }

@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,8 +21,10 @@ import com.bumptech.glide.Glide;
 import com.example.ahmetboluk.moviest.Api.TmdbApi;
 import com.example.ahmetboluk.moviest.Data.Result;
 import com.example.ahmetboluk.moviest.Data.peopleDetail.PersonDetail;
+import com.example.ahmetboluk.moviest.MyFragment.DetailFragment;
 import com.example.ahmetboluk.moviest.MyFragment.mainTabItem.TabOne;
 import com.example.ahmetboluk.moviest.R;
+import com.example.ahmetboluk.moviest.RecyclerItemClickListener;
 import com.example.ahmetboluk.moviest.adapter.MoviesAdapter;
 import com.example.ahmetboluk.moviest.adapter.PersonDetailAdapter;
 
@@ -39,7 +42,11 @@ public class PeopleTabTwo extends Fragment {
     private RecyclerView recyclerView;
     private PersonDetailAdapter personDetailAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private int MOVIE = 0;
+
+    private int birkere=0;
+    private int SELECTED=0;
+    private int SELECTED_MOVIE=0;
+    private int SELECTED_TV=1;
 
 
     @Override
@@ -52,9 +59,11 @@ public class PeopleTabTwo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view=  inflater.inflate(R.layout.fragment_people_tab_two, container, false);
-        personDetail = (PersonDetail) getArguments().getSerializable("personDetail");
 
         recyclerView = view.findViewById(R.id.rv_person_movie);
+        personDetail = (PersonDetail) getArguments().getSerializable("personDetail");
+
+        SELECTED=SELECTED_MOVIE;
 
         personDetailAdapter= new PersonDetailAdapter(getContext(),personDetail);
         layoutManager = new GridLayoutManager(getContext(), 3);
@@ -62,6 +71,28 @@ public class PeopleTabTwo extends Fragment {
         recyclerView.addItemDecoration(new PeopleTabTwo.GridSpacingItemDecoration(9, dpToPx(1), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(personDetailAdapter);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(),recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        DetailFragment detailFragment = new DetailFragment();
+                        Bundle data=new Bundle();
+                        data.putInt("movie_id", personDetail.getMovieCredits().getCast().get(position).getId());
+                        data.putInt("selected",SELECTED);
+                        detailFragment.setArguments(data);
+                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_activity,detailFragment,null);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+                })
+        );
 
 
 

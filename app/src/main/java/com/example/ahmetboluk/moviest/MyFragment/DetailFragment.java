@@ -1,9 +1,13 @@
 package com.example.ahmetboluk.moviest.MyFragment;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,24 +16,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.ahmetboluk.moviest.Api.TmdbApi;
+import com.example.ahmetboluk.moviest.Data.Videos;
 import com.example.ahmetboluk.moviest.Data.movieDetail.Detail;
 import com.example.ahmetboluk.moviest.Data.seriesDetail.SeriesDetail;
-import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabOne;
-import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabThree;
-import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabTwo;
+import com.example.ahmetboluk.moviest.MainActivity;
 import com.example.ahmetboluk.moviest.R;
 import com.example.ahmetboluk.moviest.RecyclerItemClickListener;
+import com.example.ahmetboluk.moviest.YoutubeFragment;
 import com.example.ahmetboluk.moviest.adapter.CastingAdapter;
 import com.example.ahmetboluk.moviest.adapter.SeriesCastingAdapter;
 import com.example.ahmetboluk.moviest.adapter.SimilarMovieAdapter;
 import com.example.ahmetboluk.moviest.adapter.SimilarSeriesAdapter;
+
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,12 +62,15 @@ public class DetailFragment extends Fragment {
     LinearLayoutManager similarlayoutManager,castinglayoutManager,seriesCastinglayoutManager,similarSerieslayoutManager;
     Detail movieDetail;
     SeriesDetail seriesDetail;
-    TextView titleText,dateText,minuteText,genreText,nationText,scoreText,owerviewText;
+    Videos videos;
+    TextView titleText,dateText,minuteText,genreText,nationText,scoreText,owerviewText,watchTrailer;
     ImageView movieImage;
-    RelativeLayout relativeLayout;
+    ScrollView scrollView;
+    RelativeLayout relativeLayout,video;
     ActionBar actionBar;
     ImageView loading;
     int birkere =0;
+    int ikinci_birkere =0;
 
 
     public static final String API_KEY="31b2377287f733ce461c2d352a64060e";
@@ -80,7 +92,6 @@ public class DetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-
         SELECTED=getArguments().getInt("selected");
         if (SELECTED==SELECTED_MOVIE){
             api.create(TmdbApi.class).listDetail(getArguments().getInt("movie_id"),API_KEY,"credits,similar").enqueue(new Callback<Detail>() {
@@ -88,7 +99,7 @@ public class DetailFragment extends Fragment {
                 public void onResponse(Call<Detail> call, Response<Detail> response) {
                     Log.d("URL",call.request().url().toString());
                     movieDetail=response.body();
-                    Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185"+movieDetail.getPosterPath()).into(movieImage);
+                    Glide.with(MainActivity.getAppContext()).load("https://image.tmdb.org/t/p/w185"+movieDetail.getPosterPath()).into(movieImage);
                     titleText.setText(movieDetail.getTitle());
                     dateText.setText(movieDetail.getReleaseDate().substring(0,4));
                     minuteText.setText(movieDetail.getRuntime().toString());
@@ -108,7 +119,7 @@ public class DetailFragment extends Fragment {
                     animation.stop();
                     loading.setVisibility(View.INVISIBLE);
 
-                    relativeLayout.setVisibility(View.VISIBLE);
+                    scrollView.setVisibility(View.VISIBLE);
                     birkere=1;
                 }
 
@@ -119,7 +130,6 @@ public class DetailFragment extends Fragment {
                 }
             });
         }else if (SELECTED==SELECTED_TV){
-            Toast.makeText(getContext(),"MALESEF BURAYI DAHA YAPAMADIM BU ARADA BİLMEK İSTERSENİZ DİZİNİN ID Sİ "+getArguments().getInt("series_id"), Toast.LENGTH_LONG).show();
             api.create(TmdbApi.class).listSeriesDetail(getArguments().getInt("series_id"),API_KEY,"credits,similar").enqueue(new Callback<SeriesDetail>() {
                 @Override
                 public void onResponse(Call<SeriesDetail> call, Response<SeriesDetail> response) {
@@ -144,7 +154,7 @@ public class DetailFragment extends Fragment {
                     animation.stop();
                     loading.setVisibility(View.INVISIBLE);
 
-                    relativeLayout.setVisibility(View.VISIBLE);
+                    scrollView.setVisibility(View.VISIBLE);
                     birkere=1;
 
 
@@ -156,16 +166,20 @@ public class DetailFragment extends Fragment {
                 }
             });
         }
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail,container,false);
 
+
         loading = (ImageView) view.findViewById(R.id.im_loading);
         animation= (AnimationDrawable)loading.getDrawable();
         animation.start();
-
+        scrollView = (ScrollView) view.findViewById(R.id.sv_layout);
+        video= (RelativeLayout) view.findViewById(R.id.video_view_video);
+        watchTrailer = (TextView) view.findViewById(R.id.watch_trailer);
         relativeLayout = (RelativeLayout) view.findViewById(R.id.rv_layout);
         movieImage = (ImageView) view.findViewById(R.id.iv_movie_jpeg);
         titleText =(TextView) view.findViewById(R.id.tv_movie_title);
@@ -246,7 +260,7 @@ public class DetailFragment extends Fragment {
                 similarRecyclerView.setLayoutManager(similarlayoutManager);
                 similarRecyclerView.setAdapter(similarMovieAdapter);
                 animation.stop();
-                relativeLayout.setVisibility(View.VISIBLE);
+                scrollView.setVisibility(View.VISIBLE);
             }else if (SELECTED==SELECTED_TV){
                 Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185"+seriesDetail.getPosterPath()).into(movieImage);
                 titleText.setText(seriesDetail.getName());
@@ -268,9 +282,76 @@ public class DetailFragment extends Fragment {
                 animation.stop();
                 loading.setVisibility(View.INVISIBLE);
 
-                relativeLayout.setVisibility(View.VISIBLE);
+                scrollView.setVisibility(View.VISIBLE);
             }
         }
+        watchTrailer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(SELECTED==SELECTED_MOVIE) {
+                    api.create(TmdbApi.class).listMovieVideos(getArguments().getInt("movie_id"), API_KEY).enqueue(new Callback<Videos>() {
+
+                        @Override
+                        public void onResponse(Call<Videos> call, Response<Videos> response) {
+                            Log.d("URL", call.request().url().toString());
+                            videos = response.body();
+                            for (int i = 0; i < videos.getResults().size(); i++) {
+                                if (videos.getResults().get(i).getType().equals("Trailer")) {
+                                    YoutubeFragment fragment = new YoutubeFragment();
+                                    Bundle data = new Bundle();
+                                    data.putString("key", videos.getResults().get(i).getKey());
+                                    fragment.setArguments(data);
+                                    FragmentManager manager = getActivity().getSupportFragmentManager();
+                                    manager.beginTransaction()
+                                            .replace(R.id.main_activity, fragment)
+                                            .addToBackStack(null)
+                                            .commit();
+                                    break;
+                                } else if (videos.getResults().isEmpty()) {
+                                    Toast.makeText(MainActivity.getAppContext(), "Trailer Bulunamadı. Özür Dileriz.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Videos> call, Throwable t) {
+                            Log.e("HATA", "onFailure: " + t.getMessage().toString());
+                        }
+                    });
+                }else if (SELECTED==SELECTED_TV){
+                    api.create(TmdbApi.class).listTvVideos(getArguments().getInt("series_id"), API_KEY).enqueue(new Callback<Videos>() {
+
+                        @Override
+                        public void onResponse(Call<Videos> call, Response<Videos> response) {
+                            Log.d("URL", call.request().url().toString());
+                            videos = response.body();
+                            for (int i = 0; i < videos.getResults().size(); i++) {
+                                if (videos.getResults().get(i).getType().equals("Trailer")) {
+                                    YoutubeFragment fragment = new YoutubeFragment();
+                                    Bundle data = new Bundle();
+                                    data.putString("key", videos.getResults().get(i).getKey());
+                                    fragment.setArguments(data);
+                                    FragmentManager manager = getActivity().getSupportFragmentManager();
+                                    manager.beginTransaction()
+                                            .replace(R.id.main_activity, fragment)
+                                            .addToBackStack(null)
+                                            .commit();
+                                    break;
+                                } else if (videos.getResults().isEmpty()) {
+                                    Toast.makeText(MainActivity.getAppContext(), "Trailer Bulunamadı. Özür Dileriz.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Videos> call, Throwable t) {
+                            Log.e("HATA", "onFailure: " + t.getMessage().toString());
+                        }
+                    });
+                }
+            }
+        });
         return view;
     }
 
@@ -278,16 +359,6 @@ public class DetailFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 }

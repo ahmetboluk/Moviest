@@ -26,9 +26,12 @@ public class PeopleTabOne extends Fragment {
     TextView textView;
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
     }
 
@@ -37,6 +40,7 @@ public class PeopleTabOne extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_people_tab_one, container, false);
         textView = (TextView) view.findViewById(R.id.tv_biography);
+
         textView.setText(getArguments().getString("person"));
 
 

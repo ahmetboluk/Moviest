@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ahmetboluk.moviest.Data.peopleDetail.PersonDetail;
+import com.example.ahmetboluk.moviest.MyFragment.DetailFragment;
 import com.example.ahmetboluk.moviest.R;
+import com.example.ahmetboluk.moviest.RecyclerItemClickListener;
 import com.example.ahmetboluk.moviest.adapter.PersonDetailAdapter;
 import com.example.ahmetboluk.moviest.adapter.PersonDetailAdapterII;
 
@@ -25,7 +28,11 @@ public class PeopleTabThree extends Fragment {
     private RecyclerView recyclerView;
     private PersonDetailAdapterII personDetailAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private int TV = 1;
+
+    private int SELECTED=0;
+    private int SELECTED_MOVIE=0;
+    private int SELECTED_TV=1;
+
 
 
     @Override
@@ -40,6 +47,8 @@ public class PeopleTabThree extends Fragment {
         View view=  inflater.inflate(R.layout.fragment_people_tab_three, container, false);
         personDetail = (PersonDetail) getArguments().getSerializable("personDetail");
 
+        SELECTED=SELECTED_TV;
+
         recyclerView = view.findViewById(R.id.rv_person_tv);
 
         personDetailAdapter= new PersonDetailAdapterII(getContext(),personDetail);
@@ -49,8 +58,27 @@ public class PeopleTabThree extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(personDetailAdapter);
 
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(),recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        DetailFragment detailFragment = new DetailFragment();
+                        Bundle data=new Bundle();
+                        data.putInt("series_id", personDetail.getTvCredits().getCast().get(position).getId());
+                        data.putInt("selected",SELECTED);
+                        detailFragment.setArguments(data);
+                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_activity,detailFragment,null);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
 
+                    @Override
+                    public void onLongItemClick(View view, int position) {
 
+                    }
+                })
+        );
         return view;
     }
 
