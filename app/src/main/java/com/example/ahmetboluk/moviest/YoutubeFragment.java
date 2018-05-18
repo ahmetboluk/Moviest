@@ -18,8 +18,7 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 public class YoutubeFragment extends Fragment {
 
-    private static final String API_KEY = "AIzaSyAqEhMctk1myqrrP5lvE8NAzYywHqw_5gs";
-    private static String VIDEO_ID = "ye6GCY_vqYk";
+    private static final String API_KEY = "Pc deki kodda var";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +41,7 @@ public class YoutubeFragment extends Fragment {
                 if (!wasRestored) {
                     player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
                     player.loadVideo(getArguments().getString("key"));
+                    player.setFullscreen(true);
                     player.play();
                 }
             }

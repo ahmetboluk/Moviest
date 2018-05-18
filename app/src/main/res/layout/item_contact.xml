@@ -11,91 +11,90 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
+        android:background="@color/colorPrimary"
         android:elevation="3dp"
-        card_view:cardCornerRadius="@dimen/card_album_radius"
-        android:background="@color/colorPrimary">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/colorPrimary">
-    <FrameLayout
-        android:id="@+id/fr_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        card_view:cardCornerRadius="@dimen/card_album_radius">
 
-        <ImageView
-            android:id="@+id/thumbnail"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/album_cover_height"
-            android:clickable="true"
-            android:scaleType="fitXY" />
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#40000000"
-            android:id="@+id/titleView"
-            android:layout_gravity="bottom"
-            >
-            <TextView
-                android:id="@+id/title"
+            <FrameLayout
+                android:id="@+id/fr_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/textColorPrimary"
-                android:textSize="14dp"
-                android:textAlignment="center"
-                />
-        </LinearLayout>
+                android:background="@color/colorPrimary">
 
-    </FrameLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fr_layout"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:paddingRight="4dp"
-        android:paddingLeft="4dp"
-        android:background="@color/colorAccent">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+                <ImageView
+                    android:id="@+id/thumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="300px"
+                    android:clickable="true"
+                    android:scaleType="fitXY"
+                    />
 
-        >
-        <ImageView
-            android:id="@+id/star"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_grade_black_18dp"
-            android:layout_centerVertical="true"
-            />
+                <LinearLayout
+                    android:id="@+id/titleView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="#40000000">
 
-        <TextView
-            android:id="@+id/count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="puan"
-            android:layout_toRightOf="@+id/star"
-            android:textColor="@color/textColorPrimary"
-            android:textSize="@dimen/songs_count"
-            android:layout_centerVertical="true"/>
-        <TextView
-            android:layout_centerVertical="true"
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="tarih"
-            android:textSize="@dimen/songs_count"
-            android:textColor="@color/textColorPrimary"
-            android:layout_gravity="end"
-            android:layout_alignParentRight="true"
-        />
-    </RelativeLayout>
-    </LinearLayout>
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="14dp" />
+                </LinearLayout>
 
-</RelativeLayout>
+            </FrameLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fr_layout"
+                android:background="@color/colorAccent"
+                android:paddingBottom="2dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/star"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_grade_black_18dp" />
+
+                    <TextView
+                        android:id="@+id/count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/star"
+                        android:text="puan"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="@dimen/songs_count" />
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="end"
+                        android:text="tarih"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="@dimen/songs_count" />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
-
 </LinearLayout>
