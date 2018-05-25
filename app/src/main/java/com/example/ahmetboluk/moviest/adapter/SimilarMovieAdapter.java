@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.ahmetboluk.moviest.Data.movieDetail.Result;
 import com.example.ahmetboluk.moviest.R;
 
@@ -33,7 +34,10 @@ public class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Glide.with(mContect).load("https://image.tmdb.org/t/p/w185"+resultList.get(position).getPosterPath()).into(holder.imageView);
+        Glide.with(mContect)
+                .applyDefaultRequestOptions(new RequestOptions().placeholder(R.drawable.no_photo))
+                .load("https://image.tmdb.org/t/p/w185"+resultList.get(position).getPosterPath())
+                .into(holder.imageView);
 
     }
 

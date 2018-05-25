@@ -37,7 +37,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignBottom="@+id/tv_people_nation"
                 android:scaleType="centerCrop"
-                android:src="@drawable/image_1" />
+                android:src="@drawable/no_photo" />
 
             <ImageView
                 android:id="@+id/iv_people_image"
@@ -47,7 +47,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/image_1" />
+                android:src="@drawable/no_photo" />
 
             <TextView
                 android:id="@+id/tv_people_name"

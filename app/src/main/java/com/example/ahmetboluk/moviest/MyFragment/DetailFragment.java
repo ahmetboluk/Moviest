@@ -29,6 +29,7 @@ import com.example.ahmetboluk.moviest.Api.TmdbApi;
 import com.example.ahmetboluk.moviest.Data.Videos;
 import com.example.ahmetboluk.moviest.Data.movieDetail.Detail;
 import com.example.ahmetboluk.moviest.Data.seriesDetail.SeriesDetail;
+import com.example.ahmetboluk.moviest.DialogFragment;
 import com.example.ahmetboluk.moviest.MainActivity;
 import com.example.ahmetboluk.moviest.R;
 import com.example.ahmetboluk.moviest.RecyclerItemClickListener;
@@ -63,15 +64,12 @@ public class DetailFragment extends Fragment {
     Detail movieDetail;
     SeriesDetail seriesDetail;
     Videos videos;
-    TextView titleText,dateText,minuteText,genreText,nationText,scoreText,owerviewText,watchTrailer;
+    TextView titleText,dateText,minuteText,genreText,nationText,scoreText,owerviewText,watchTrailer,addToList;
     ImageView movieImage;
     ScrollView scrollView;
     RelativeLayout relativeLayout,video;
     ActionBar actionBar;
     ImageView loading;
-    int birkere =0;
-    int ikinci_birkere =0;
-
 
     public static final String API_KEY="31b2377287f733ce461c2d352a64060e";
     Retrofit api =new Retrofit.Builder().baseUrl("https://api.themoviedb.org/3/").addConverterFactory(GsonConverterFactory.create()).build();
@@ -90,6 +88,7 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
 
         SELECTED=getArguments().getInt("selected");
@@ -120,7 +119,6 @@ public class DetailFragment extends Fragment {
                     loading.setVisibility(View.INVISIBLE);
 
                     scrollView.setVisibility(View.VISIBLE);
-                    birkere=1;
                 }
 
                 @Override
@@ -155,9 +153,6 @@ public class DetailFragment extends Fragment {
                     loading.setVisibility(View.INVISIBLE);
 
                     scrollView.setVisibility(View.VISIBLE);
-                    birkere=1;
-
-
                 }
 
                 @Override
@@ -173,7 +168,7 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail,container,false);
 
-
+        addToList=(TextView) view.findViewById(R.id.add_to_list);
         loading = (ImageView) view.findViewById(R.id.im_loading);
         animation= (AnimationDrawable)loading.getDrawable();
         animation.start();
@@ -205,7 +200,7 @@ public class DetailFragment extends Fragment {
                         data.putInt("selected",SELECTED);
                         detailFragment.setArguments(data);
                         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_activity,detailFragment,null);
+                        fragmentTransaction.add(R.id.main_activity,detailFragment,null);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                     }
@@ -229,7 +224,7 @@ public class DetailFragment extends Fragment {
                         data.putInt("selected",SELECTED);
                         castDetailFragment.setArguments(data);
                         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_activity,castDetailFragment,null);
+                        fragmentTransaction.add(R.id.main_activity,castDetailFragment,null);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                     }
@@ -240,51 +235,6 @@ public class DetailFragment extends Fragment {
                     }
                 })
         );
-        if (birkere==1){
-            if(SELECTED==SELECTED_MOVIE) {
-                Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185" + movieDetail.getPosterPath()).into(movieImage);
-                titleText.setText(movieDetail.getTitle());
-                dateText.setText(movieDetail.getReleaseDate().substring(0, 4));
-                minuteText.setText(movieDetail.getRuntime().toString());
-                genreText.setText(movieDetail.getGenres().get(0).getName());
-                nationText.setText(movieDetail.getProductionCountries().get(0).getName());
-                scoreText.setText(movieDetail.getVoteAverage().toString());
-                owerviewText.setText(movieDetail.getOverview());
-                castingAdapter = new CastingAdapter(getContext(), movieDetail.getCredits().getCast());
-                castinglayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-                castRecyclerView.setLayoutManager(castinglayoutManager);
-                castRecyclerView.setAdapter(castingAdapter);
-
-                similarMovieAdapter = new SimilarMovieAdapter(getContext(), movieDetail.getSimilar().getResults());
-                similarlayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-                similarRecyclerView.setLayoutManager(similarlayoutManager);
-                similarRecyclerView.setAdapter(similarMovieAdapter);
-                animation.stop();
-                scrollView.setVisibility(View.VISIBLE);
-            }else if (SELECTED==SELECTED_TV){
-                Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185"+seriesDetail.getPosterPath()).into(movieImage);
-                titleText.setText(seriesDetail.getName());
-                dateText.setText(seriesDetail.getFirstAirDate().substring(0,4));
-                minuteText.setText(seriesDetail.getEpisodeRunTime().get(0).toString());
-                genreText.setText(seriesDetail.getGenres().get(0).getName());
-                nationText.setText(seriesDetail.getOriginCountry().get(0));
-                scoreText.setText(seriesDetail.getVoteAverage().toString());
-                owerviewText.setText(seriesDetail.getOverview());
-                seriesCastingAdapter = new SeriesCastingAdapter(getContext(), seriesDetail.getCredits().getCast());
-                seriesCastinglayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
-                castRecyclerView.setLayoutManager(seriesCastinglayoutManager);
-                castRecyclerView.setAdapter(seriesCastingAdapter);
-
-                similarSeriesAdapter = new SimilarSeriesAdapter(getContext(), seriesDetail.getSimilar().getResults());
-                similarSerieslayoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
-                similarRecyclerView.setLayoutManager(similarSerieslayoutManager);
-                similarRecyclerView.setAdapter(similarSeriesAdapter);
-                animation.stop();
-                loading.setVisibility(View.INVISIBLE);
-
-                scrollView.setVisibility(View.VISIBLE);
-            }
-        }
         watchTrailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -334,7 +284,7 @@ public class DetailFragment extends Fragment {
                                     fragment.setArguments(data);
                                     FragmentManager manager = getActivity().getSupportFragmentManager();
                                     manager.beginTransaction()
-                                            .replace(R.id.main_activity, fragment)
+                                            .add(R.id.main_activity, fragment)
                                             .addToBackStack(null)
                                             .commit();
                                     break;
@@ -352,13 +302,20 @@ public class DetailFragment extends Fragment {
                 }
             }
         });
+        addToList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getFragmentManager();
+                DialogFragment dialogFragment = new DialogFragment();
+                dialogFragment.show(fragmentManager,"DialogFragmnet");
+            }
+        });
         return view;
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    public void onResume() {
+        super.onResume();
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 }

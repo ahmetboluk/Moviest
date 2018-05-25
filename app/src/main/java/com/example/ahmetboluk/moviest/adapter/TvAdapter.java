@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.ahmetboluk.moviest.Data.SeriesResult;
 import com.example.ahmetboluk.moviest.R;
 
@@ -34,7 +35,10 @@ public class TvAdapter extends RecyclerView.Adapter<TvAdapter.MyViewHolder>{
         holder.title.setText(mSeriesResult.get(position).getName());
         holder.count.setText(mSeriesResult.get(position).getVoteAverage().toString());
         holder.date.setText(mSeriesResult.get(position).getFirstAirDate().substring(0,4));
-        Glide.with(mContext).load("https://image.tmdb.org/t/p/w185"+mSeriesResult.get(position).getPosterPath()).into(holder.thumbnail);
+        Glide.with(mContext)
+                .applyDefaultRequestOptions(new RequestOptions().placeholder(R.drawable.no_photo))
+                .load("https://image.tmdb.org/t/p/w185"+mSeriesResult.get(position).getPosterPath())
+                .into(holder.thumbnail);
 
     }
     @Override

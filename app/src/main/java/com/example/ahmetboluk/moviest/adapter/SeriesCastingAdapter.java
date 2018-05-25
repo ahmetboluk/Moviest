@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.ahmetboluk.moviest.Data.seriesDetail.Cast;
 import com.example.ahmetboluk.moviest.R;
 
@@ -35,7 +36,10 @@ public class SeriesCastingAdapter extends RecyclerView.Adapter<SeriesCastingAdap
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.textView.setText(mCasts.get(position).getName());
-        Glide.with(mContext).load("https://image.tmdb.org/t/p/w185"+mCasts.get(position).getProfilePath()).into(holder.imageView);
+        Glide.with(mContext)
+                .applyDefaultRequestOptions(new RequestOptions().placeholder(R.drawable.no_photo))
+                .load("https://image.tmdb.org/t/p/w185"+mCasts.get(position).getProfilePath())
+                .into(holder.imageView);
     }
 
     @Override

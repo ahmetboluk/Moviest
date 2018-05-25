@@ -65,5 +65,14 @@ public interface TmdbApi {
     @GET("tv/{tv_id}/videos")
     Call<Videos> listTvVideos (@Path("tv_id") int movie_id, @Query("api_key") String apikey);
 
+    @GET("search/movie")
+    Call<PageData> listSearchMovieResult(@Query("api_key") String apikey, @Query("query") String query, @Query("page") int page);
+
+    @GET("search/person")
+    Call<PageData> listSearchPersonResult(@Query("api_key") String apikey, @Query("query") String query, @Query("page") int page);
+
+    @GET("search/tv")
+    Call<PageData> listSearchSeriesResult(@Query("api_key") String apikey, @Query("query") String query, @Query("page") int page);
+
 
 }

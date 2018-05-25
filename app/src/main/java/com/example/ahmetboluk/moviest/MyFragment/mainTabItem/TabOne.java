@@ -42,8 +42,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class TabOne extends Fragment implements BottomTabLayotListener {
 
     AnimationDrawable animation;
-
-
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
     private TvAdapter tvAdapter;
@@ -155,7 +153,7 @@ public class TabOne extends Fragment implements BottomTabLayotListener {
                         data.putInt("selected",SELECTED);
                         detailFragment.setArguments(data);
                         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_activity,detailFragment,null);
+                        fragmentTransaction.add(R.id.main_activity,detailFragment,null);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                     }

@@ -9,7 +9,7 @@
         android:id="@+id/im_casting_image"
         android:layout_width="100dp"
         android:layout_height="150dp"
-        android:src="@drawable/image_1"/>
+        android:src="@drawable/no_photo"/>
     <TextView
         android:id="@+id/tv_casting_name"
         android:layout_width="wrap_content"

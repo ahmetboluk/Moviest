@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.ahmetboluk.moviest.Api.TmdbApi;
 import com.example.ahmetboluk.moviest.Data.peopleDetail.PersonDetail;
+import com.example.ahmetboluk.moviest.MainActivity;
 import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeoplePagerAdapter;
 import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabOne;
 import com.example.ahmetboluk.moviest.MyFragment.castTabItem.PeopleTabThree;
@@ -40,10 +41,6 @@ public class CastDetailFragment extends Fragment {
     ViewPager viewPager;
     PeoplePagerAdapter pagerAdapter;
     TabLayout tabLayout;
-
-
-    int birkere;
-
     public CastDetailFragment() {
 
     }
@@ -64,7 +61,6 @@ public class CastDetailFragment extends Fragment {
         final ImageView loading = (ImageView) view.findViewById(R.id.im_loading);
         animation= (AnimationDrawable)loading.getDrawable();
         animation.start();
-        if (birkere==0){
         relativeLayout = (RelativeLayout) view.findViewById(R.id.rl_people_layout);
 
         personImage=(ImageView) view.findViewById(R.id.iv_people_image);
@@ -92,7 +88,7 @@ public class CastDetailFragment extends Fragment {
                 personBirdDay.setText(personDetail.getBirthday());
                 personNation.setText(personDetail.getPlaceOfBirth());
 
-                pagerAdapter = new PeoplePagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount(),personDetail);
+                pagerAdapter = new PeoplePagerAdapter(getChildFragmentManager(),tabLayout.getTabCount(),personDetail);
                 viewPager.setAdapter(pagerAdapter);
                 viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
                 viewPager.setOffscreenPageLimit(3);
@@ -115,57 +111,13 @@ public class CastDetailFragment extends Fragment {
                 animation.stop();
                 loading.setVisibility(View.INVISIBLE);
                 relativeLayout.setVisibility(View.VISIBLE);
-                birkere=1;
-
-
             }
-
             @Override
             public void onFailure(Call<PersonDetail> call, Throwable t) {
-
             }
-        });}
-        else if ( birkere==1){
-            Glide.with(getContext()).load("https://image.tmdb.org/t/p/w185"+personDetail.getProfilePath()).into(personImage);
-            Glide.with(getContext()).load("https://image.tmdb.org/t/p/w200"+personDetail.getMovieCredits().getCast().get(0).getBackdropPath()).into(backgraundImage);
-            personName.setText(personDetail.getName());
-            personBirdDay.setText(personDetail.getBirthday());
-            personNation.setText(personDetail.getPlaceOfBirth());
-
-            pagerAdapter = new PeoplePagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount(),personDetail);
-            viewPager.setAdapter(pagerAdapter);
-            viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-            viewPager.setOffscreenPageLimit(3);
-            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    viewPager.setCurrentItem(tab.getPosition());
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
-                }
-            });
-            animation.stop();
-            loading.setVisibility(View.INVISIBLE);
-            relativeLayout.setVisibility(View.VISIBLE);
-        }
-
-
-
+        });
         return view;
-
     }
-
-
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

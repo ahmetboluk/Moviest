@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -30,10 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int SERIES_SELECTED = 1;
 
     private static Context mContext;
-    private List<ImageButton> buttonList = null;
-
-    private FloatingActionButton floatingActionButton;
-
+    private ImageButton imageButton;
 
     public static Context getAppContext() {
         return mContext;
@@ -48,9 +46,7 @@ public class MainActivity extends AppCompatActivity {
             requestPermissions(new String[]{Manifest.permission.INTERNET}, 0);
         }
         mContext = getApplicationContext();
-        initSegmentButtons();
-
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        imageButton = findViewById(R.id.main_search_button);
 
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -116,19 +112,18 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        floatingActionButton = findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                SearchFragment searchFragment = new SearchFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                SearchFragment searchFragment = new SearchFragment();
                 fragmentTransaction.setCustomAnimations(R.anim.enter_from_bottom_right, R.anim.exit_from_top_right, R.anim.enter_from_bottom_right, R.anim.exit_from_top_right);
-                fragmentTransaction.replace(R.id.main_activity, searchFragment, null);
+                fragmentTransaction.add(R.id.main_activity, searchFragment, "SEARCH");
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
+
 
     }
 
@@ -152,21 +147,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    private void initSegmentButtons() {
-
-        buttonList = new ArrayList<>();
-
-        ImageButton dayBtn = (ImageButton) findViewById(R.id.btn_day);
-        ImageButton weekBtn = (ImageButton) findViewById(R.id.btn_week);
-        ImageButton monthBtn = (ImageButton) findViewById(R.id.btn_month);
-
-        buttonList.add(dayBtn);
-        buttonList.add(weekBtn);
-        buttonList.add(monthBtn);
-    }
-
-
 
 }
 

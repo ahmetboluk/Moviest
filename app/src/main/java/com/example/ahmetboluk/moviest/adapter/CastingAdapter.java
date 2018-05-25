@@ -1,6 +1,7 @@
 package com.example.ahmetboluk.moviest.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.ahmetboluk.moviest.Data.movieDetail.Cast;
 
 import com.example.ahmetboluk.moviest.R;
@@ -36,7 +38,10 @@ public class CastingAdapter extends RecyclerView.Adapter<CastingAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.textView.setText(mCasts.get(position).getName());
-        Glide.with(mContext).load("https://image.tmdb.org/t/p/w185"+mCasts.get(position).getProfilePath()).into(holder.imageView);
+        Glide.with(mContext)
+                .applyDefaultRequestOptions(new RequestOptions().placeholder(R.drawable.no_photo))
+                .load("https://image.tmdb.org/t/p/w185"+mCasts.get(position).getProfilePath())
+                .into(holder.imageView);
     }
 
     @Override

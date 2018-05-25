@@ -1,15 +1,13 @@
 package com.example.ahmetboluk.moviest.Data;
-
-
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+public class KnownFor {
 
-public class Result {
-    @SerializedName("original_name")
+    @SerializedName("vote_average")
     @Expose
-    private String originalName;
+    private Double voteAverage;
     @SerializedName("vote_count")
     @Expose
     private Integer voteCount;
@@ -19,12 +17,9 @@ public class Result {
     @SerializedName("video")
     @Expose
     private Boolean video;
-    @SerializedName("vote_average")
+    @SerializedName("media_type")
     @Expose
-    private Double voteAverage;
-    @SerializedName("name")
-    @Expose
-    private String name;
+    private String mediaType;
     @SerializedName("title")
     @Expose
     private String title;
@@ -46,12 +41,6 @@ public class Result {
     @SerializedName("backdrop_path")
     @Expose
     private String backdropPath;
-    @SerializedName("profile_path")
-    @Expose
-    private Object profilePath;
-    @SerializedName("known_for")
-    @Expose
-    private List<KnownFor> knownFor = null;
     @SerializedName("adult")
     @Expose
     private Boolean adult;
@@ -61,6 +50,12 @@ public class Result {
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
+    @SerializedName("original_name")
+    @Expose
+    private String originalName;
+    @SerializedName("name")
+    @Expose
+    private String name;
     @SerializedName("first_air_date")
     @Expose
     private String firstAirDate;
@@ -68,9 +63,13 @@ public class Result {
     @Expose
     private List<String> originCountry = null;
 
-    public String getOriginalName() { return originalName; }
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
 
-    public void setOriginalName(String originalName) { this.originalName = originalName; }
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
+    }
 
     public Integer getVoteCount() {
         return voteCount;
@@ -96,17 +95,13 @@ public class Result {
         this.video = video;
     }
 
-    public Double getVoteAverage() {
-        return voteAverage;
+    public String getMediaType() {
+        return mediaType;
     }
 
-    public void setVoteAverage(Double voteAverage) {
-        this.voteAverage = voteAverage;
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
     }
-
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
 
     public String getTitle() {
         return title;
@@ -136,7 +131,9 @@ public class Result {
         return originalLanguage;
     }
 
-    public void setOriginalLanguage(String originalLanguage) { this.originalLanguage = originalLanguage; }
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
 
     public String getOriginalTitle() {
         return originalTitle;
@@ -162,14 +159,6 @@ public class Result {
         this.backdropPath = backdropPath;
     }
 
-    public Object getProfilePath() { return profilePath; }
-
-    public void setProfilePath(Object profilePath) { this.profilePath = profilePath; }
-
-    public List<KnownFor> getKnownFor() { return knownFor; }
-
-    public void setKnownFor(List<KnownFor> knownFor) { this.knownFor = knownFor; }
-
     public Boolean getAdult() {
         return adult;
     }
@@ -194,13 +183,36 @@ public class Result {
         this.releaseDate = releaseDate;
     }
 
-    public String getFirstAirDate() { return firstAirDate; }
+    public String getOriginalName() {
+        return originalName;
+    }
 
-    public void setFirstAirDate(String firstAirDate) { this.firstAirDate = firstAirDate; }
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
+    }
 
-    public List<String> getOriginCountry() { return originCountry; }
+    public String getName() {
+        return name;
+    }
 
-    public void setOriginCountry(List<String> originCountry) { this.originCountry = originCountry; }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFirstAirDate() {
+        return firstAirDate;
+    }
+
+    public void setFirstAirDate(String firstAirDate) {
+        this.firstAirDate = firstAirDate;
+    }
+
+    public List<String> getOriginCountry() {
+        return originCountry;
+    }
+
+    public void setOriginCountry(List<String> originCountry) {
+        this.originCountry = originCountry;
+    }
 
 }
-

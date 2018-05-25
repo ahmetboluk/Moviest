@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.ahmetboluk.moviest.Data.peopleDetail.PersonDetail;
 import com.example.ahmetboluk.moviest.R;
 
@@ -33,7 +34,10 @@ public class PersonDetailAdapterII extends RecyclerView.Adapter<PersonDetailAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Glide.with(mcontext).load("https://image.tmdb.org/t/p/w185"+mpersonDetail.getTvCredits().getCast().get(position).getPosterPath()).into(holder.imageView);
+        Glide.with(mcontext)
+                .applyDefaultRequestOptions(new RequestOptions().placeholder(R.drawable.no_photo))
+                .load("https://image.tmdb.org/t/p/w185"+mpersonDetail.getTvCredits().getCast().get(position).getPosterPath())
+                .into(holder.imageView);
         holder.textView.setText(mpersonDetail.getTvCredits().getCast().get(position).getName());
     }
 

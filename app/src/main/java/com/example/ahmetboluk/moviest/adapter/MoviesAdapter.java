@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.ahmetboluk.moviest.Data.Result;
 import com.example.ahmetboluk.moviest.R;
 
@@ -60,6 +61,7 @@ import java.util.List;
 
             }
             Glide.with(mContext)
+                    .applyDefaultRequestOptions(new RequestOptions().placeholder(R.drawable.no_photo))
                     .load("https://image.tmdb.org/t/p/w185"+pageDataList.get(position).getPosterPath())
                     .into(holder.thumbnail);
         }

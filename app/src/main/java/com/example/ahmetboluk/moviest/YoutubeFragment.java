@@ -18,7 +18,8 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 public class YoutubeFragment extends Fragment {
 
-    private static final String API_KEY = "Pc deki kodda var";
+    private static final String API_KEY = "AIzaSyAqEhMctk1myqrrP5lvE8NAzYywHqw_5gs";
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

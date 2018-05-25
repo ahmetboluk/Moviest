@@ -67,8 +67,8 @@ public class PeopleTabThree extends Fragment {
                         data.putInt("series_id", personDetail.getTvCredits().getCast().get(position).getId());
                         data.putInt("selected",SELECTED);
                         detailFragment.setArguments(data);
-                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_activity,detailFragment,null);
+                        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.add(R.id.main_activity,detailFragment,null);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                     }

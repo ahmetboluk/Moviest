@@ -151,7 +151,7 @@ public class TabTwo extends Fragment implements BottomTabLayotListener {
                         data.putInt("selected",SELECTED);
                         detailFragment.setArguments(data);
                         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_activity,detailFragment,null);
+                        fragmentTransaction.add(R.id.main_activity,detailFragment,null);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                     }

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import com.example.ahmetboluk.moviest.Api.TmdbApi;
 import com.example.ahmetboluk.moviest.Data.PageData;
+import com.example.ahmetboluk.moviest.MainActivity;
 import com.example.ahmetboluk.moviest.R;
 import com.example.ahmetboluk.moviest.RecyclerItemClickListener;
 import com.example.ahmetboluk.moviest.adapter.MoviesAdapter;
@@ -29,56 +30,60 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class GenreDetailFragment extends Fragment{
+public class GenreDetailFragment extends Fragment {
 
-    private int SELECTED=0;
-    private int SELECTED_MOVIE=0;
-    private int SELECTED_TV=1;
+    private int SELECTED = 0;
+    private int SELECTED_MOVIE = 0;
+    private int SELECTED_TV = 1;
 
-    public static final String API_KEY="31b2377287f733ce461c2d352a64060e";
-    Retrofit api =new Retrofit.Builder().baseUrl("https://api.themoviedb.org/3/").addConverterFactory(GsonConverterFactory.create()).build();
+    public static final String API_KEY = "31b2377287f733ce461c2d352a64060e";
+    Retrofit api = new Retrofit.Builder().baseUrl("https://api.themoviedb.org/3/").addConverterFactory(GsonConverterFactory.create()).build();
     //GELEN DİZİLERİ DE MoviesAdapter ile bastım ona dikkat ett movie adapter koyduğum if ile tarihi düzelttim
     MoviesAdapter mMoviesAdapter;
     MoviesAdapter mSeriesAdapter;
     RecyclerView.LayoutManager mLayoutManager;
     PageData pageData;
     PageData seriesPageData;
-    private int page=1;
+    private int page = 1;
     RecyclerView mRecyclerView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SELECTED=getArguments().getInt("selected");
+
+        SELECTED = getArguments().getInt("selected");
         if (SELECTED == SELECTED_MOVIE) {
-            api.create(TmdbApi.class).listGenreMovie(API_KEY,page,getArguments().getInt("genre_id")).enqueue(new Callback<PageData>() {
-            @Override
-            public void onResponse(Call<PageData> call, Response<PageData> response) {
-                pageData = response.body();
-                mMoviesAdapter = new MoviesAdapter(getContext(),pageData.getResults());
-                mLayoutManager = new GridLayoutManager(getContext(), 3);
-                mRecyclerView.setLayoutManager(mLayoutManager);
-                mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                mRecyclerView.setAdapter(mMoviesAdapter);
-            }
-            @Override
-            public void onFailure(Call<PageData> call, Throwable t) {
-                Log.i("tag", "onFailure: "+t.getMessage());
-            }
+            api.create(TmdbApi.class).listGenreMovie(API_KEY, page, getArguments().getInt("genre_id")).enqueue(new Callback<PageData>() {
+                @Override
+                public void onResponse(Call<PageData> call, Response<PageData> response) {
+                    pageData = response.body();
+                    mMoviesAdapter = new MoviesAdapter(getContext(), pageData.getResults());
+                    mLayoutManager = new GridLayoutManager(getContext(), 3);
+                    mRecyclerView.setLayoutManager(mLayoutManager);
+                    mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                    mRecyclerView.setAdapter(mMoviesAdapter);
+                }
+
+                @Override
+                public void onFailure(Call<PageData> call, Throwable t) {
+                    Log.i("tag", "onFailure: " + t.getMessage());
+                }
             });
-        }else if (SELECTED==SELECTED_TV){
-            api.create(TmdbApi.class).listGenreSeries(API_KEY,page,getArguments().getInt("genre_id")).enqueue(new Callback<PageData>() {
+        } else if (SELECTED == SELECTED_TV) {
+            api.create(TmdbApi.class).listGenreSeries(API_KEY, page, getArguments().getInt("genre_id")).enqueue(new Callback<PageData>() {
                 @Override
                 public void onResponse(Call<PageData> call, Response<PageData> response) {
                     seriesPageData = response.body();
-                    mSeriesAdapter = new MoviesAdapter(getContext(),seriesPageData.getResults());
+                    mSeriesAdapter = new MoviesAdapter(getContext(), seriesPageData.getResults());
                     mLayoutManager = new GridLayoutManager(getContext(), 3);
                     mRecyclerView.setLayoutManager(mLayoutManager);
                     mRecyclerView.setItemAnimator(new DefaultItemAnimator());
                     mRecyclerView.setAdapter(mSeriesAdapter);
                 }
+
                 @Override
                 public void onFailure(Call<PageData> call, Throwable t) {
-                    Log.i("tag", "onFailure: "+t.getMessage());
+                    Log.i("tag", "onFailure: " + t.getMessage());
                 }
             });
         }
@@ -88,23 +93,23 @@ public class GenreDetailFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_genre_detail,container,false);
+        View view = inflater.inflate(R.layout.fragment_genre_detail, container, false);
         mRecyclerView = view.findViewById(R.id.rv_genre_detail);
         mRecyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getContext(),mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener(getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         DetailFragment detailFragment = new DetailFragment();
-                        Bundle data=new Bundle();
-                        if(SELECTED==SELECTED_MOVIE) {
+                        Bundle data = new Bundle();
+                        if (SELECTED == SELECTED_MOVIE) {
                             data.putInt("movie_id", mMoviesAdapter.getItem(position).getId());
-                        }else if (SELECTED==SELECTED_TV){
-                            data.putInt("series_id",mSeriesAdapter.getItem(position).getId());
+                        } else if (SELECTED == SELECTED_TV) {
+                            data.putInt("series_id", mSeriesAdapter.getItem(position).getId());
                         }
-                        data.putInt("selected",SELECTED);
+                        data.putInt("selected", SELECTED);
                         detailFragment.setArguments(data);
                         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_activity,detailFragment,null);
+                        fragmentTransaction.add(R.id.main_activity, detailFragment, null);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                     }
@@ -118,17 +123,17 @@ public class GenreDetailFragment extends Fragment{
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                LinearLayoutManager layoutManager=LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
+                LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
                 int totalItemCount = layoutManager.getItemCount();
                 int lastVisible = layoutManager.findLastVisibleItemPosition();
 
-                boolean endHasBeenReached = lastVisible+1 >= totalItemCount;
+                boolean endHasBeenReached = lastVisible + 1 >= totalItemCount;
                 if (totalItemCount > 0 && endHasBeenReached) {
                     //you have reached to the bottom of your recycler view
                     page++;
-                    Log.d("Page size",page+" ");
-                    if(SELECTED==SELECTED_MOVIE) {
-                        api.create(TmdbApi.class).listGenreMovie(API_KEY,page,getArguments().getInt("genre_id")).enqueue(new Callback<PageData>() {
+                    Log.d("Page size", page + " ");
+                    if (SELECTED == SELECTED_MOVIE) {
+                        api.create(TmdbApi.class).listGenreMovie(API_KEY, page, getArguments().getInt("genre_id")).enqueue(new Callback<PageData>() {
                             @Override
                             public void onResponse(Call<PageData> call, Response<PageData> response) {
                                 if (response.body().getResults().size() > 0) {
@@ -142,8 +147,8 @@ public class GenreDetailFragment extends Fragment{
 
                             }
                         });
-                    }else if(SELECTED==SELECTED_TV){
-                        api.create(TmdbApi.class).listGenreSeries(API_KEY,page,getArguments().getInt("genre_id")).enqueue(new Callback<PageData>() {
+                    } else if (SELECTED == SELECTED_TV) {
+                        api.create(TmdbApi.class).listGenreSeries(API_KEY, page, getArguments().getInt("genre_id")).enqueue(new Callback<PageData>() {
                             @Override
                             public void onResponse(Call<PageData> call, Response<PageData> response) {
                                 if (response.body().getResults().size() > 0) {
@@ -165,21 +170,6 @@ public class GenreDetailFragment extends Fragment{
 
         return view;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
