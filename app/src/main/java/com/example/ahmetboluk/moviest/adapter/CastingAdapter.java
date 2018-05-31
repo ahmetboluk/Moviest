@@ -1,7 +1,6 @@
 package com.example.ahmetboluk.moviest.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.ahmetboluk.moviest.Data.movieDetail.Cast;
+import com.example.ahmetboluk.moviest.data.movieDetail.Cast;
 
 import com.example.ahmetboluk.moviest.R;
 

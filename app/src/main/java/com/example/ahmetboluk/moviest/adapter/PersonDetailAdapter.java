@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.ahmetboluk.moviest.Data.peopleDetail.PersonDetail;
+import com.example.ahmetboluk.moviest.data.peopleDetail.PersonDetail;
 import com.example.ahmetboluk.moviest.R;
 
 public class PersonDetailAdapter extends RecyclerView.Adapter<PersonDetailAdapter.MyViewHolder>{

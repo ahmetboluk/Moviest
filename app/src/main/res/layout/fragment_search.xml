@@ -6,7 +6,7 @@
     android:background="@color/colorPrimary"
     android:clickable="true"
     android:orientation="vertical"
-    tools:context=".MyFragment.SearchFragment">
+    tools:context=".myFragment.SearchFragment">
 
     <LinearLayout
         android:id="@+id/toolbar_search"

@@ -42,7 +42,7 @@
         android:background="@color/colorPrimary"
         android:padding="10dp"
         android:visibility="invisible"
-        tools:context=".MyFragment.DetailFragment">
+        tools:context=".myFragment.DetailFragment">
 
         <RelativeLayout
             android:layout_width="match_parent"

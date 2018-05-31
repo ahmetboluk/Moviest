@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.ahmetboluk.moviest.Data.movieDetail.Result;
+import com.example.ahmetboluk.moviest.data.movieDetail.Result;
 import com.example.ahmetboluk.moviest.R;
 
 import java.util.List;

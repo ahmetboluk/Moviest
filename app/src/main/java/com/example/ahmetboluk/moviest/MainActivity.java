@@ -4,25 +4,19 @@ import android.Manifest;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 
-import com.example.ahmetboluk.moviest.MyFragment.BottomTabLayotListener;
-import com.example.ahmetboluk.moviest.MyFragment.SearchFragment;
-import com.example.ahmetboluk.moviest.MyFragment.mainTabItem.PagerAdapter;
+import com.example.ahmetboluk.moviest.myFragment.BottomTabLayotListener;
+import com.example.ahmetboluk.moviest.myFragment.SearchFragment;
+import com.example.ahmetboluk.moviest.myFragment.mainTabItem.PagerAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {

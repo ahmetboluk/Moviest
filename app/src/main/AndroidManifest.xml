@@ -20,6 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="com.example.ahmetboluk.moviest.dataBase.MoviestProvider"
+            android:name=".dataBase.MoviestProvider">
+        </provider>
     </application>
 
 </manifest>

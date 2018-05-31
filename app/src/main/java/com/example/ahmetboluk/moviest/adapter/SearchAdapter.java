@@ -12,17 +12,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.ahmetboluk.moviest.Api.TmdbApi;
-import com.example.ahmetboluk.moviest.Data.Result;
-import com.example.ahmetboluk.moviest.Data.peopleDetail.PersonDetail;
-import com.example.ahmetboluk.moviest.MainActivity;
+import com.example.ahmetboluk.moviest.data.Result;
 import com.example.ahmetboluk.moviest.R;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

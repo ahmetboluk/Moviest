@@ -8,11 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.ahmetboluk.moviest.Data.Genre;
-import com.example.ahmetboluk.moviest.Data.Genres;
+import com.example.ahmetboluk.moviest.data.Genres;
 import com.example.ahmetboluk.moviest.R;
-
-import java.util.List;
 
 public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.MyviewHolder>{
     public Context mContext;
