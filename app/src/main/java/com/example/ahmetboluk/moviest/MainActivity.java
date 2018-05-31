@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static Context getAppContext() {
         return mContext;
     }
-
+//SON GG
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
