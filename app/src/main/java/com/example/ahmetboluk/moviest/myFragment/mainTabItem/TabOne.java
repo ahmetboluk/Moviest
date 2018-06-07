@@ -168,8 +168,6 @@ public class TabOne extends Fragment implements BottomTabLayotListener {
 
     }
 
-
-
     @Override
     public void onMovieSelected() {
         Log.d("BottomSelected","MovieSelected TabOne");

@@ -298,13 +298,13 @@ public class DetailFragment extends Fragment {
                 DialogFragment dialogFragment = new DialogFragment();
                 Bundle data=new Bundle();
                 if(SELECTED==SELECTED_MOVIE) {
-                    data.putInt("movie_id",getArguments().getInt("movie_id"));
+                    data.putInt("itemid",getArguments().getInt("movie_id"));
                     data.putString("name",movieDetail.getTitle());
                     data.putString("date",movieDetail.getReleaseDate().substring(0,4));
                     data.putString("poster",movieDetail.getPosterPath());
                     data.putString("rate",movieDetail.getVoteAverage().toString());
                 }else if(SELECTED==SELECTED_TV){
-                    data.putInt("series_id",getArguments().getInt("series_id"));
+                    data.putInt("itemid",getArguments().getInt("series_id"));
                     data.putString("name",seriesDetail.getName());
                     data.putString("date",seriesDetail.getFirstAirDate().substring(0,4));
                     data.putString("poster",seriesDetail.getPosterPath());

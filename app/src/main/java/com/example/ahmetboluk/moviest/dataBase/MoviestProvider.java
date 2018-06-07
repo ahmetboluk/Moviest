@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
 
@@ -64,12 +65,35 @@ public class MoviestProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        int i;
+        switch (matcher.match(uri)) {
+            case URICODE_CATEGORIES:
+                i = db.delete(MoviestContract.CategoriesEntry.TABLE_NAME,selection,selectionArgs);
+                break;
+            case URICODE_MOVIESTITEM:
+                i = db.delete(MoviestContract.MoviestItemEntry.TABLE_NAME,selection,selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("BILINMEYEN QUERY URI" + uri);
+        }
+        return i;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        int count = 0;
+
+        switch (matcher.match(uri)){
+            case URICODE_CATEGORIES:
+                //nada
+                break;
+            case URICODE_MOVIESTITEM:
+                count = db.update(MoviestContract.MoviestItemEntry.TABLE_NAME,values,selection,selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
+        return count;
     }
 
     private Uri myInsert(Uri uri, ContentValues values, String tableName) {

@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,9 @@ import android.view.View;
 import android.widget.ImageButton;
 
 
+import com.example.ahmetboluk.moviest.myFragment.AboutFragment;
 import com.example.ahmetboluk.moviest.myFragment.BottomTabLayotListener;
+import com.example.ahmetboluk.moviest.myFragment.ListFragment;
 import com.example.ahmetboluk.moviest.myFragment.SearchFragment;
 import com.example.ahmetboluk.moviest.myFragment.mainTabItem.PagerAdapter;
 
@@ -23,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int MOVIES_SELECTED = 0;
     private static final int SERIES_SELECTED = 1;
+    private int lastchooseOne = 0;
+    private int lastchooseTwo = 0;
+
 
     private static Context mContext;
     private ImageButton imageButton;
@@ -55,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         final TabLayout tabLayoutbottom = (TabLayout) findViewById(R.id.tab_layout_bottom);
         tabLayoutbottom.addTab(tabLayoutbottom.newTab().setText("Movie"));
         tabLayoutbottom.addTab(tabLayoutbottom.newTab().setText("Tv"));
+        tabLayoutbottom.addTab(tabLayoutbottom.newTab().setText("Lists"));
+        tabLayoutbottom.addTab(tabLayoutbottom.newTab().setText("Credits"));
         tabLayoutbottom.setTabGravity(tabLayoutbottom.GRAVITY_FILL);
 
 
@@ -123,14 +131,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void onBottomLayoutSelected(int position) {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        //FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        FragmentManager manager = this.getSupportFragmentManager();
+        //BU SATIRLAR GERİ GELİNMESİ DURUMLARINI AYARLANMAK İÇİN EKLENMİŞTİR
+
+        //
 
         if (position == MOVIES_SELECTED) {
-
             for (int i = 0; i < fragments.size(); i++) {
-
                 if (fragments.get(i) instanceof BottomTabLayotListener) {
-
                     ((BottomTabLayotListener) fragments.get(i)).onMovieSelected();
+                }
+                if (lastchooseOne == 1) {
+                    getSupportFragmentManager().beginTransaction().detach(manager.findFragmentByTag("List")).commit();
+                    lastchooseOne = 0;
+                }else if (lastchooseTwo == 2) {
+                    getSupportFragmentManager().beginTransaction().detach(manager.findFragmentByTag("About")).commit();
+                    lastchooseTwo = 0;
                 }
             }
         } else if (position == SERIES_SELECTED) {
@@ -138,10 +155,33 @@ public class MainActivity extends AppCompatActivity {
                 if (fragments.get(i) instanceof BottomTabLayotListener) {
                     ((BottomTabLayotListener) fragments.get(i)).onSeriesSelected();
                 }
+                if (lastchooseOne == 1) {
+                    getSupportFragmentManager().beginTransaction().detach(manager.findFragmentByTag("List")).commit();
+                    lastchooseOne = 0;
+                }else if (lastchooseTwo == 2) {
+                    getSupportFragmentManager().beginTransaction().detach(manager.findFragmentByTag("About")).commit();
+
+                    lastchooseTwo = 0;
+                }
             }
+        } else if (position == 2) {
+            ListFragment listFragment = new ListFragment();
+            //fragmentTransaction.replace(R.id.rl_solution, listFragment, "LIST");
+            //fragmentTransaction.commit();
+            manager.beginTransaction()
+                    .replace(R.id.rl_solution, listFragment, "List")
+                    .commit();
+            lastchooseOne = 1;
+            //BU SATIRLAR GERİ GELİNMESİ DURUMLARINI AYARLANMAK İÇİN EKLENMİŞTİR
+        } else if (position == 3) {
+            AboutFragment aboutFragment = new AboutFragment();
+            //fragmentTransaction.replace(R.id.rl_solution, aboutFragment, "ABOUT");
+            //fragmentTransaction.commit();
+            manager.beginTransaction()
+                    .replace(R.id.rl_solution, aboutFragment, "About")
+                    .commit();
+            lastchooseTwo = 2;
+            //BU SATIRLAR GERİ GELİNMESİ DURUMLARINI AYARLANMAK İÇİN EKLENMİŞTİR
         }
     }
-
 }
-
-

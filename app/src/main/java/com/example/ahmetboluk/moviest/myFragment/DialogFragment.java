@@ -1,6 +1,7 @@
 package com.example.ahmetboluk.moviest.myFragment;
 
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -39,17 +40,18 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
         addFavorites = view.findViewById(R.id.add_favorites);
 
         getDb();
-
         addToWatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (databaseResult.itemid == getArguments().getInt("movie_id") && databaseResult.categoryId == 2) {
-                    Toast.makeText(getContext(), "First Remove From  Watched", Toast.LENGTH_SHORT).show();
-                } else if (databaseResult.itemid == getArguments().getInt("movie_id") && databaseResult.categoryId == 3) {
-                    Toast.makeText(getContext(), "Firstly Remove From Favorites ", Toast.LENGTH_SHORT).show();
-                } else if (!(databaseResult.itemid == getArguments().getInt("movie_id") && databaseResult.categoryId == 1)) {
+                if (databaseResult.itemid == getArguments().getInt("itemid") && (databaseResult.categoryId == 2 || databaseResult.categoryId == 3)) {
+                    ContentValues values = new ContentValues();
+                    values.put(MoviestContract.MoviestItemEntry.COLUMN_CATEGORY, 1);
+                    int recordsUpdated = MainActivity.getAppContext().getContentResolver().update(MoviestContract.MoviestItemEntry.CONTENT_URI, values, "itemid=?", new String[]{String.valueOf(getArguments().getInt("itemid"))});
+                    Toast.makeText(getContext(), "First Remove From Watch" + recordsUpdated, Toast.LENGTH_SHORT).show();
+                    getDb();
+                } else if (!(databaseResult.itemid == getArguments().getInt("itemid") && databaseResult.categoryId == 1)) {
                     ContentValues contentValues = new ContentValues();
-                    contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_ID, String.valueOf(getArguments().getInt("movie_id")));
+                    contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_ID, String.valueOf(getArguments().getInt("itemid")));
                     contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_NAME, getArguments().getString("name"));
                     contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_YEAR, getArguments().getString("date"));
                     contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_THUMBNAIL_URL, getArguments().getString("poster"));
@@ -58,23 +60,27 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                     contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_CATEGORY, 1);
                     Uri _uri = MainActivity.getAppContext().getContentResolver().insert(MoviestContract.MoviestItemEntry.CONTENT_URI, contentValues);
                     getDb();
-                    dismiss();
                 } else {
+                    ContentResolver contentResolver = MainActivity.getAppContext().getContentResolver();
+                    int i = contentResolver.delete(MoviestContract.MoviestItemEntry.CONTENT_URI, "itemid=?", new String[]{String.valueOf(getArguments().getInt("itemid"))});
+                    getDb();
                     dismiss();
-                    Toast.makeText(getContext(), "TO BE CONTINUED", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "TO BE CONTINUED" + i, Toast.LENGTH_SHORT).show();
                 }
             }
         });
         addWatched.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (databaseResult.itemid == getArguments().getInt("movie_id") && databaseResult.categoryId == 1) {
-                    Toast.makeText(getContext(), "First Remove From Watch", Toast.LENGTH_SHORT).show();
-                } else if (databaseResult.itemid == getArguments().getInt("movie_id") && databaseResult.categoryId == 3) {
-                    Toast.makeText(getContext(), "Firstly Remove From Favorites ", Toast.LENGTH_SHORT).show();
-                } else if (!(databaseResult.itemid == getArguments().getInt("movie_id") && databaseResult.categoryId == 2)) {
+                if (databaseResult.itemid == getArguments().getInt("itemid") && (databaseResult.categoryId == 1 || databaseResult.categoryId == 3)) {
+                    ContentValues values = new ContentValues();
+                    values.put(MoviestContract.MoviestItemEntry.COLUMN_CATEGORY, 2);
+                    int recordsUpdated = MainActivity.getAppContext().getContentResolver().update(MoviestContract.MoviestItemEntry.CONTENT_URI, values, "itemid=?", new String[]{String.valueOf(getArguments().getInt("itemid"))});
+                    Toast.makeText(getContext(), "First Remove From Watch" + recordsUpdated, Toast.LENGTH_SHORT).show();
+                    getDb();
+                } else if (!(databaseResult.itemid == getArguments().getInt("itemid") && databaseResult.categoryId == 2)) {
                     ContentValues contentValues = new ContentValues();
-                    contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_ID, String.valueOf(getArguments().getInt("movie_id")));
+                    contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_ID, String.valueOf(getArguments().getInt("itemid")));
                     contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_NAME, getArguments().getString("name"));
                     contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_YEAR, getArguments().getString("date"));
                     contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_THUMBNAIL_URL, getArguments().getString("poster"));
@@ -84,21 +90,26 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                     Uri _uri = MainActivity.getAppContext().getContentResolver().insert(MoviestContract.MoviestItemEntry.CONTENT_URI, contentValues);
                     getDb();
                 } else {
+                    ContentResolver contentResolver = MainActivity.getAppContext().getContentResolver();
+                    int i = contentResolver.delete(MoviestContract.MoviestItemEntry.CONTENT_URI, "itemid=?", new String[]{String.valueOf(getArguments().getInt("itemid"))});
+                    getDb();
                     dismiss();
-                    Toast.makeText(getContext(), "TO BE CONTINUED", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "TO BE CONTINUED" + i, Toast.LENGTH_SHORT).show();
                 }
             }
         });
         addFavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (databaseResult.itemid == getArguments().getInt("movie_id") && databaseResult.categoryId == 1) {
-                    Toast.makeText(getContext(), "First Remove From Watch", Toast.LENGTH_SHORT).show();
-                } else if (databaseResult.itemid == getArguments().getInt("movie_id") && databaseResult.categoryId == 2) {
-                    Toast.makeText(getContext(), "Firstly Remove From Watched ", Toast.LENGTH_SHORT).show();
-                } else if (!(databaseResult.itemid == getArguments().getInt("movie_id") && databaseResult.categoryId == 3)) {
+                if (databaseResult.itemid == getArguments().getInt("itemid") && (databaseResult.categoryId == 1) || databaseResult.categoryId == 2) {
+                    ContentValues values = new ContentValues();
+                    values.put(MoviestContract.MoviestItemEntry.COLUMN_CATEGORY, 3);
+                    int recordsUpdated = MainActivity.getAppContext().getContentResolver().update(MoviestContract.MoviestItemEntry.CONTENT_URI, values, "itemid=?", new String[]{String.valueOf(getArguments().getInt("itemid"))});
+                    Toast.makeText(getContext(), "First Remove From Watch" + recordsUpdated, Toast.LENGTH_SHORT).show();
+                    getDb();
+                } else if (!(databaseResult.itemid == getArguments().getInt("itemid") && databaseResult.categoryId == 3)) {
                     ContentValues contentValues = new ContentValues();
-                    contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_ID, String.valueOf(getArguments().getInt("movie_id")));
+                    contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_ID, String.valueOf(getArguments().getInt("itemid")));
                     contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_NAME, getArguments().getString("name"));
                     contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_YEAR, getArguments().getString("date"));
                     contentValues.put(MoviestContract.MoviestItemEntry.COLUMN_THUMBNAIL_URL, getArguments().getString("poster"));
@@ -108,8 +119,11 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                     Uri _uri = MainActivity.getAppContext().getContentResolver().insert(MoviestContract.MoviestItemEntry.CONTENT_URI, contentValues);
                     getDb();
                 } else {
+                    ContentResolver contentResolver = MainActivity.getAppContext().getContentResolver();
+                    int i = contentResolver.delete(MoviestContract.MoviestItemEntry.CONTENT_URI, "itemid=?", new String[]{String.valueOf(getArguments().getInt("itemid"))});
+                    getDb();
                     dismiss();
-                    Toast.makeText(getContext(), "TO BE CONTINUED", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "TO BE CONTINUED" + i, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -128,7 +142,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 "moviestItem.rate",
                 "moviestItem.type",
                 "moviestItem.categoryId"};
-        cursor = MainActivity.getAppContext().getContentResolver().query(MoviestContract.MoviestItemEntry.CONTENT_URI, projection, "itemid=?", new String[]{String.valueOf(getArguments().getInt("movie_id"))}, null, null);
+        cursor = MainActivity.getAppContext().getContentResolver().query(MoviestContract.MoviestItemEntry.CONTENT_URI, projection, "itemid=?", new String[]{String.valueOf(getArguments().getInt("itemid"))}, null, null);
         databaseResult = new DatabaseResult();
         if (cursor != null) {
             while (cursor.moveToNext()) {
@@ -145,21 +159,21 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
         }
         switch (databaseResult.categoryId) {
             case 1:
-                if (databaseResult.itemid == getArguments().getInt("movie_id")) {
+                if (databaseResult.itemid == getArguments().getInt("itemid")) {
                     addToWatch.setText("Delete Watch");
                     addWatched.setText("Move to Watched");
                     addFavorites.setText("Move to Favorities");
                 }
                 break;
             case 2:
-                if (databaseResult.itemid == getArguments().getInt("movie_id")) {
+                if (databaseResult.itemid == getArguments().getInt("itemid")) {
                     addWatched.setText("Delete Watched");
                     addFavorites.setText("Move to Favorities");
                     addToWatch.setText("Move to Watch");
                 }
                 break;
             case 3:
-                if (databaseResult.itemid == getArguments().getInt("movie_id")) {
+                if (databaseResult.itemid == getArguments().getInt("itemid")) {
                     addFavorites.setText("Delete Favorities");
                     addWatched.setText("Move to Watched");
                     addToWatch.setText("Move to Watch");
