@@ -28,7 +28,8 @@ public class AboutFragment extends Fragment {
         return view;
 
     }
-    /*private void onBottomLayoutSelected(int position) {
+    /*
+    private void onBottomLayoutSelected(int position) {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         FragmentManager manager = this.getSupportFragmentManager();
 
@@ -78,13 +79,5 @@ public class AboutFragment extends Fragment {
 
         }
     }
-
-
-
-    fragmentManager.beginTransaction()
-                                .replace(R.id.main_activity, detailListFragment, null)
-                                .addToBackStack(null)
-                                .commit();
-
     */
 }
