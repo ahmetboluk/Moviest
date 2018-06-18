@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     public static Context getAppContext() {
         return mContext;
     }
-//SON GG
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +49,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Genres"));
-        tabLayout.addTab(tabLayout.newTab().setText("Popular"));
-        tabLayout.addTab(tabLayout.newTab().setText("Top Rated"));
-        tabLayout.addTab(tabLayout.newTab().setText("Now Playing"));
-        tabLayout.addTab(tabLayout.newTab().setText("Up Coming"));
+        tabLayout.addTab(tabLayout.newTab().setText("GENRES"));
+        tabLayout.addTab(tabLayout.newTab().setText("POPULAR"));
+        tabLayout.addTab(tabLayout.newTab().setText("TOP RATED"));
+        tabLayout.addTab(tabLayout.newTab().setText("NOW PLAYING"));
+        tabLayout.addTab(tabLayout.newTab().setText("UP COMING"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
 
 
         final TabLayout tabLayoutbottom = (TabLayout) findViewById(R.id.tab_layout_bottom);
@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-
             }
 
             @Override
@@ -95,11 +94,11 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 onBottomLayoutSelected(tab.getPosition());
                 if (tab.getPosition() == 1) {
-                    tabLayout.getTabAt(3).setText("Airing Today");
-                    tabLayout.getTabAt(4).setText("On The Air");
+                    tabLayout.getTabAt(3).setText("AIRING TODAY");
+                    tabLayout.getTabAt(4).setText("ON THE AIR");
                 } else {
-                    tabLayout.getTabAt(3).setText("Now Playing");
-                    tabLayout.getTabAt(4).setText("Up Coming");
+                    tabLayout.getTabAt(3).setText("NOW PLAYING");
+                    tabLayout.getTabAt(4).setText("UP COMING");
                 }
             }
 
@@ -172,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.rl_solution, listFragment, "List")
                     .commit();
             lastchooseOne = 1;
+            lastchooseTwo = 0;
             //BU SATIRLAR GERİ GELİNMESİ DURUMLARINI AYARLANMAK İÇİN EKLENMİŞTİR
         } else if (position == 3) {
             AboutFragment aboutFragment = new AboutFragment();
@@ -181,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.rl_solution, aboutFragment, "About")
                     .commit();
             lastchooseTwo = 2;
+            lastchooseOne = 0;
             //BU SATIRLAR GERİ GELİNMESİ DURUMLARINI AYARLANMAK İÇİN EKLENMİŞTİR
         }
     }

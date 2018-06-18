@@ -55,7 +55,7 @@ public class TabGenres extends Fragment implements BottomTabLayotListener {
             public void onResponse(Call<Genres> call, Response<Genres> response) {
                 mMovieGenres = response.body();
                 mLayoutManager = new LinearLayoutManager(getContext());
-                mMovieGenresAdapter = new GenresAdapter(getContext(),mMovieGenres);
+                mMovieGenresAdapter = new GenresAdapter(getContext(),mMovieGenres,0);
                 genreRecyclerView.setLayoutManager(mLayoutManager);
                 genreRecyclerView.setAdapter(mMovieGenresAdapter);
                 animation.stop();
@@ -126,7 +126,7 @@ public class TabGenres extends Fragment implements BottomTabLayotListener {
             public void onResponse(Call<Genres> call, Response<Genres> response) {
                 mSeriesGenres = response.body();
                 mLayoutManager = new LinearLayoutManager(getContext());
-                mSeriesGenresAdapter = new GenresAdapter(getContext(),mSeriesGenres);
+                mSeriesGenresAdapter = new GenresAdapter(getContext(),mSeriesGenres,1);
                 genreRecyclerView.setLayoutManager(mLayoutManager);
                 genreRecyclerView.setAdapter(mSeriesGenresAdapter);
                 animation.stop();
